@@ -1,24 +1,20 @@
-import logo from './logo.svg';
 import './App.css';
+import { Box, ThemeProvider } from '@mui/material';
+import Sidebar from './component/Sidebar';
+import InputArea from './component/InputArea';
+import GanttArea from './component/GanttArea';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload, and text CI/CD for sure!
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <ThemeProvider>
+      <Box sx={{ display: 'flex', backgroundColor: '#F5F6F8', height: '100vh'}}>
+        <Sidebar />
+        <Box>
+          <InputArea />
+          <GanttArea />
+        </Box>
+      </Box>
+    </ThemeProvider>
   );
 }
 
