@@ -3,10 +3,11 @@ import { Box, ThemeProvider } from '@mui/material';
 import Sidebar from './component/Sidebar';
 import InputArea from './component/InputArea';
 import GanttArea from './component/GanttArea';
+import Theme from './Theme';
 
 function App() {
   return (
-    <ThemeProvider>
+    <ThemeProvider theme={Theme}>
       <Box sx={{ display: 'flex', backgroundColor: '#F5F6F8', height: '100vh'}}>
         <Sidebar />
         <Box>
