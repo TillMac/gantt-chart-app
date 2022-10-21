@@ -8,9 +8,14 @@ import Theme from './Theme';
 function App() {
   return (
     <ThemeProvider theme={Theme}>
-      <Box sx={{ display: 'flex', backgroundColor: '#F5F6F8', height: '100vh'}}>
+      <Box sx={{
+        display: 'flex',
+        backgroundColor: '#F5F6F8',
+        height: '100vh',
+        width: '100%',
+      }}>
         <Sidebar />
-        <Box>
+        <Box sx={{width: '100%',}}>
           <InputArea />
           <GanttArea />
         </Box>
