@@ -15,7 +15,7 @@ function App() {
         width: '100%',
       }}>
         <Sidebar />
-        <Box sx={{width: '100%',}}>
+        <Box sx={{width: '100%', overflowX: 'hidden'}}>
           <InputArea />
           <GanttArea />
         </Box>
