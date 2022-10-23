@@ -1,11 +1,22 @@
 import './App.css';
 import { Box, ThemeProvider } from '@mui/material';
-import Sidebar from './component/Sidebar';
+import Sidebar from './component/Sidebar/Sidebar';
 import InputArea from './component/InputArea';
-import GanttArea from './component/GanttArea';
 import Theme from './Theme';
+import { useState } from 'react';
+import { Outlet } from 'react-router-dom';
 
 function App() {
+  const [ganttData, setGanttData] = useState(() => {
+    let ganttDatas = localStorage.getItem("ganttDatas");
+    let ganttData = JSON.parse(ganttDatas);
+    if (ganttData) {
+      return ganttData;
+    } else {
+      return [];
+    }
+  });
+
   return (
     <ThemeProvider theme={Theme}>
       <Box sx={{
@@ -14,10 +25,10 @@ function App() {
         height: '100vh',
         width: '100%',
       }}>
-        <Sidebar />
+        <Sidebar ganttData={ganttData} setGanttData={setGanttData} />
         <Box sx={{width: '100%', overflowX: 'hidden'}}>
           <InputArea />
-          <GanttArea />
+          <Outlet />
         </Box>
       </Box>
     </ThemeProvider>
