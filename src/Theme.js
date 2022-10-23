@@ -10,6 +10,7 @@ const Theme = createTheme({
     },
     other: {
       white: 'white',
+      text: '#<5F5F5F',
       btn: '#5D5FEF'
     },
   },
