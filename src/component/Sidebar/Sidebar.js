@@ -54,8 +54,8 @@ const Sidebar = ({ ganttData, setGanttData }) => {
               }}>
                 {ganttData.map((project) => {
                   return (
-                  <Link to={`/projects/${project.name}`} style={{textDecoration: 'none', color: 'inherit'}}>
-                    <ListItem key={project.id}>
+                  <Link to={`/projects/${project.name}`} style={{textDecoration: 'none', color: 'inherit'}}  key={project.id}>
+                    <ListItem>
                       <ListItemButton>
                         <ListItemIcon>
                           <Folder/>
