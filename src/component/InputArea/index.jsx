@@ -6,8 +6,6 @@ import { v4 as uuidv4 } from 'uuid';
 import { useState } from "react";
 
 const InputArea = ({ ganttData, setGanttData }) => {
-  const [startDate, setStartDate] = useState([null, null]);
-  const [deadline, setDeadline] = useState([null, null]);
   const [taskData, setTaskData] = useState({
     id: null,
     name: '',
@@ -41,23 +39,8 @@ const InputArea = ({ ganttData, setGanttData }) => {
     })
   };
 
-  // const startDateHandler = (e) => {
-  //   setTaskData({
-  //     ...taskData,
-  //     start: e.target.value,
-  //   })
-  // };
-
-  // const deadlineHandler = (e) => {
-  //   setTaskData({
-  //     ...taskData,
-  //     end: e.target.value,
-  //   })
-  // };
-
   const submitHandler = e => {
     e.preventDefault();
-    console.log('taskData', taskData);
     const newList = ganttData;
     const result = ganttData.some(project => project.name === taskData.project);
     (result) ? (
@@ -71,6 +54,15 @@ const InputArea = ({ ganttData, setGanttData }) => {
     );
     setGanttData(newList);
     console.log('ganttData', ganttData);
+    setTaskData({
+      id: null,
+      name: '',
+      project: '',
+      type: '',
+      start: null,
+      end: null,
+      progress: 0,
+    });
   };
 
   return (
@@ -98,6 +90,7 @@ const InputArea = ({ ganttData, setGanttData }) => {
                 label="Task Name"
                 placeholder="輸入事項名稱..."
                 onChange={taskNameHandler}
+                value={taskData.name}
               />
             </FormControl>
             <FormControl sx={{minWidth: '150px',}}>
@@ -105,6 +98,7 @@ const InputArea = ({ ganttData, setGanttData }) => {
               <Select
                 label="Project Name"
                 onChange={projectNameHandler}
+                value={taskData.project}
               >
                 {
                   ganttData.map((projects) => {
@@ -113,9 +107,6 @@ const InputArea = ({ ganttData, setGanttData }) => {
                     )
                   })
                 }
-                {/* <MenuItem value={10}>Ten</MenuItem>
-                <MenuItem value={20}>Twenty</MenuItem>
-                <MenuItem value={30}>Thirty</MenuItem> */}
               </Select>
             </FormControl>
             <FormControl sx={{minWidth: '150px',}}>
@@ -124,47 +115,45 @@ const InputArea = ({ ganttData, setGanttData }) => {
                 label="Task Type"
                 placeholder="輸入事項樣式..."
                 onChange={taskTypeHandler}
+                value={taskData.type}
               >
                 <MenuItem value={'task'}>Task</MenuItem>
                 <MenuItem value={'milestone'}>Milestone</MenuItem>
               </Select>
             </FormControl>
             <div style={{maxWidth: '150px'}}>
-            <LocalizationProvider dateAdapter={AdapterDayjs}>
-              <DatePicker
-                label="Start Date"
-                value={startDate}
-                onChange={(startDate) => {
-                  setStartDate(startDate);
-                  setTaskData(
-                    {
-                      ...taskData,
-                      start: startDate.$d,
-                    }
-                  )
-                }}
-                renderInput={(params) => <TextField {...params} />}
-              />
-            </LocalizationProvider>
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <DatePicker
+                  label="Start Date"
+                  value={taskData.start}
+                  onChange={(startDate) => {
+                    setTaskData(
+                      {
+                        ...taskData,
+                        start: startDate.$d,
+                      }
+                    )
+                  }}
+                  renderInput={(params) => <TextField {...params} />}
+                />
+              </LocalizationProvider>
             </div>
             <div style={{maxWidth: '150px'}} >
-            <LocalizationProvider dateAdapter={AdapterDayjs} sx={{maxWidth: '120px'}} >
-              <DatePicker
-                label="Deadline"
-                value={deadline}
-                onChange={(deadline) => {
-                  setDeadline(deadline);
-                  setTaskData(
-                    {
-                      ...taskData,
-                      end: deadline.$d,
-                    }
-                  );
-                  console.log('newValue', deadline)
-                }}
-                renderInput={(params) => <TextField {...params} />}
-              />
-            </LocalizationProvider>
+              <LocalizationProvider dateAdapter={AdapterDayjs} sx={{maxWidth: '120px'}} >
+                <DatePicker
+                  label="Deadline"
+                  value={taskData.end}
+                  onChange={(deadline) => {
+                    setTaskData(
+                      {
+                        ...taskData,
+                        end: deadline.$d,
+                      }
+                    );
+                  }}
+                  renderInput={(params) => <TextField {...params} />}
+                />
+              </LocalizationProvider>
             </div>
           </Stack>
           <Button
