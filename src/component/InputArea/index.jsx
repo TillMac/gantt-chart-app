@@ -21,7 +21,7 @@ const InputArea = ({ ganttData, setGanttData }) => {
   const taskNameHandler = (e) => {
     setTaskData({
       ...taskData,
-      id: uuidv4,
+      id: uuidv4(),
       name: e.target.value,
       progress: 0,
     })
@@ -55,73 +55,22 @@ const InputArea = ({ ganttData, setGanttData }) => {
   //   })
   // };
 
-  // 嘗試 將 taskData 結合至對應的 ganttData object 中，此為嘗試一
-  // const addProjectTaskHandler = (e) => {
-  //   e.preventDefault();
-  //   const result = ganttData.findIndex((project) => project.name === taskData.project);
-  //   // ? ganttData[result].list.push(taskData)
-  //   if (result !== null || result !== undefined) {
-  //     setGanttData((prevGanttData) => [
-  //       ...prevGanttData].map(projects => {
-  //         if (projects.name === taskData.project) {
-  //           return {
-  //           ...projects,
-  //           list: (prevList) => [
-  //             ...prevList,
-  //             taskData,
-  //           ]
-  //         }
-  //         } else return projects;
-  //       })
-  //     );
-  //     console.log('ganttData', ganttData);
-  //     setTaskData({
-  //       id: null,
-  //       name: '',
-  //       project: '',
-  //       type: '',
-  //       start: null,
-  //       end: null,
-  //       progress: 0,
-  //     });
-  //   } else {
-  //     console.log('something went wrong', taskData);
-  //     console.log('something went wrong', ganttData);
-  //   }
-  // };
-
-  // 嘗試 將 taskData 結合至對應的 ganttData object 中，嘗試二
-  const addProjectTaskHandler = (e) => {
+  const submitHandler = e => {
     e.preventDefault();
     console.log('taskData', taskData);
-    if (ganttData.map(project => project.name === taskData.project)) {
-      setGanttData((prevGanttData) => [
-        ...prevGanttData].map(projects => {
-          if (projects.name === taskData.project) {
-            return {
-            ...projects,
-            list: (prevList) => [
-              ...prevList,
-              taskData,
-            ]
-          }
-          } else return projects;
-        })
-      );
-      console.log('ganttData', ganttData);
-      setTaskData({
-        id: null,
-        name: '',
-        project: '',
-        type: '',
-        start: null,
-        end: null,
-        progress: 0,
-      });
-    } else {
-      console.log('something went wrong', taskData);
-      console.log('something went wrong', ganttData);
-    }  
+    const newList = ganttData;
+    const result = ganttData.some(project => project.name === taskData.project);
+    (result) ? (
+      newList.forEach(project => {
+        if (project.name === taskData.project) {
+          project.list.push(taskData);
+        };
+      })
+    ) : (
+      console.log('project not found!')
+    );
+    setGanttData(newList);
+    console.log('ganttData', ganttData);
   };
 
   return (
@@ -140,7 +89,7 @@ const InputArea = ({ ganttData, setGanttData }) => {
         borderRadius: 2,
         boxShadow: 'rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px',
       }}>
-        <form onSubmit={addProjectTaskHandler} style={{display: 'flex', margin: 'auto', position: 'relative', maxWidth: '867px', flexWrap: 'wrap',}}>
+        <form onSubmit={submitHandler} style={{display: 'flex', margin: 'auto', position: 'relative', maxWidth: '867px', flexWrap: 'wrap',}}>
           <Stack direction='row' spacing={2.5} sx={{position: 'relative'}}>
             <FormControl sx={{minWidth: '150px',}}>
               <InputLabel htmlFor="component-outlined">Task Name</InputLabel>
@@ -185,8 +134,8 @@ const InputArea = ({ ganttData, setGanttData }) => {
               <DatePicker
                 label="Start Date"
                 value={startDate}
-                onChange={(newValue) => {
-                  setStartDate(newValue);
+                onChange={(startDate) => {
+                  setStartDate(startDate);
                   setTaskData(
                     {
                       ...taskData,
@@ -203,8 +152,8 @@ const InputArea = ({ ganttData, setGanttData }) => {
               <DatePicker
                 label="Deadline"
                 value={deadline}
-                onChange={(newValue) => {
-                  setDeadline(newValue);
+                onChange={(deadline) => {
+                  setDeadline(deadline);
                   setTaskData(
                     {
                       ...taskData,
