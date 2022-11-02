@@ -27,7 +27,7 @@ function App() {
       }}>
         <Sidebar ganttData={ganttData} setGanttData={setGanttData} />
         <Box sx={{width: '100%', overflowX: 'hidden'}}>
-          <InputArea />
+          <InputArea ganttData={ganttData} setGanttData={setGanttData} />
           <Outlet />
         </Box>
       </Box>

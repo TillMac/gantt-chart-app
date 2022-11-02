@@ -1,11 +1,69 @@
 import { Box, FormControl, InputLabel, OutlinedInput, Select, MenuItem, Stack, TextField, Button } from "@mui/material";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { v4 as uuidv4 } from 'uuid';
 
 import { useState } from "react";
 
-const InputArea = () => {
-  const [value, setValue] = useState([null, null]);
+const InputArea = ({ ganttData, setGanttData }) => {
+  const [taskData, setTaskData] = useState({
+    id: null,
+    name: '',
+    project: '',
+    type: '',
+    start: null,
+    end: null,
+    progress: 0,
+  });
+
+  const taskNameHandler = (e) => {
+    setTaskData({
+      ...taskData,
+      id: uuidv4(),
+      name: e.target.value,
+      progress: 0,
+    })
+  }
+
+  const projectNameHandler = (e) => {
+    setTaskData({
+      ...taskData,
+      project: e.target.value,
+    })
+  };
+
+  const taskTypeHandler = (e) => {
+    setTaskData({
+      ...taskData,
+      type: e.target.value,
+    })
+  };
+
+  const submitHandler = e => {
+    e.preventDefault();
+    const newList = ganttData;
+    const result = ganttData.some(project => project.name === taskData.project);
+    (result) ? (
+      newList.forEach(project => {
+        if (project.name === taskData.project) {
+          project.list.push(taskData);
+        };
+      })
+    ) : (
+      console.log('project not found!')
+    );
+    setGanttData(newList);
+    console.log('ganttData', ganttData);
+    setTaskData({
+      id: null,
+      name: '',
+      project: '',
+      type: '',
+      start: null,
+      end: null,
+      progress: 0,
+    });
+  };
 
   return (
     <Box
@@ -23,49 +81,84 @@ const InputArea = () => {
         borderRadius: 2,
         boxShadow: 'rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px',
       }}>
-        <form style={{display: 'flex', margin: 'auto', position: 'relative', maxWidth: '867px', flexWrap: 'wrap',}}>
+        <form onSubmit={submitHandler} style={{display: 'flex', margin: 'auto', position: 'relative', maxWidth: '867px', flexWrap: 'wrap',}}>
           <Stack direction='row' spacing={2.5} sx={{position: 'relative'}}>
             <FormControl sx={{minWidth: '150px',}}>
-              <InputLabel htmlFor="component-outlined">事項名稱</InputLabel>
+              <InputLabel htmlFor="component-outlined">Task Name</InputLabel>
               <OutlinedInput
                 id="component-outlined"
-                label="事項名稱"
+                label="Task Name"
                 placeholder="輸入事項名稱..."
+                onChange={taskNameHandler}
+                value={taskData.name}
               />
             </FormControl>
             <FormControl sx={{minWidth: '150px',}}>
-              <InputLabel>Age</InputLabel>
+              <InputLabel>Project Name</InputLabel>
               <Select
-                label="Age"
+                label="Project Name"
+                onChange={projectNameHandler}
+                value={taskData.project}
               >
-                <MenuItem value={10}>Ten</MenuItem>
-                <MenuItem value={20}>Twenty</MenuItem>
-                <MenuItem value={30}>Thirty</MenuItem>
+                {
+                  ganttData.map((projects) => {
+                    return (
+                      <MenuItem value={projects.name} key={projects.name} >{projects.projectName}</MenuItem>
+                    )
+                  })
+                }
               </Select>
             </FormControl>
-            <LocalizationProvider dateAdapter={AdapterDayjs}>
-              <DatePicker
-                label="開始日期"
-                value={value}
-                onChange={(newValue) => {
-                  setValue(newValue);
-                }}
-                renderInput={(params) => <TextField {...params} />}
-              />
-            </LocalizationProvider>
-            <LocalizationProvider dateAdapter={AdapterDayjs}>
-              <DatePicker
-                label="截止日期"
-                value={value}
-                onChange={(newValue) => {
-                  setValue(newValue);
-                }}
-                renderInput={(params) => <TextField {...params} />}
-              />
-            </LocalizationProvider>
+            <FormControl sx={{minWidth: '150px',}}>
+              <InputLabel>Task Type</InputLabel>
+              <Select
+                label="Task Type"
+                placeholder="輸入事項樣式..."
+                onChange={taskTypeHandler}
+                value={taskData.type}
+              >
+                <MenuItem value={'task'}>Task</MenuItem>
+                <MenuItem value={'milestone'}>Milestone</MenuItem>
+              </Select>
+            </FormControl>
+            <div style={{maxWidth: '150px'}}>
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <DatePicker
+                  label="Start Date"
+                  value={taskData.start}
+                  onChange={(startDate) => {
+                    setTaskData(
+                      {
+                        ...taskData,
+                        start: startDate.$d,
+                      }
+                    )
+                  }}
+                  renderInput={(params) => <TextField {...params} />}
+                />
+              </LocalizationProvider>
+            </div>
+            <div style={{maxWidth: '150px'}} >
+              <LocalizationProvider dateAdapter={AdapterDayjs} sx={{maxWidth: '120px'}} >
+                <DatePicker
+                  label="Deadline"
+                  value={taskData.end}
+                  onChange={(deadline) => {
+                    setTaskData(
+                      {
+                        ...taskData,
+                        end: deadline.$d,
+                      }
+                    );
+                  }}
+                  renderInput={(params) => <TextField {...params} />}
+                />
+              </LocalizationProvider>
+            </div>
           </Stack>
           <Button
             size='large'
+            type='submit'
             sx={{
               maxWidth: '150px',
               marginLeft: 'auto',
