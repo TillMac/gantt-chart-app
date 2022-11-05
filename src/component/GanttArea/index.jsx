@@ -1,7 +1,7 @@
 import { Box, Divider } from '@mui/material';
 import { Gantt } from 'gantt-task-react';
 import { useLoaderData } from 'react-router-dom';
-import React from 'react'
+import React from 'react';
 import { getGanttData } from '../../functions/getGanttData';
 
 import "gantt-task-react/dist/index.css";
@@ -32,16 +32,6 @@ const GanttArea = () => {
             )
           }))
       }
-        {/* ganttData.map((projects, idx) => {
-          return (
-            <Box key={idx} sx={{maxWidth: '90%', ml: 'auto', mr: 'auto', }}>
-              <h3>{projects.projectName}</h3>
-              <Gantt tasks={projects.list} />
-              <Divider />
-            </Box>
-          )
-        }) */}
-      {/* } */}
     </Box>
   )
 }
