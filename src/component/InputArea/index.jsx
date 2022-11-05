@@ -53,6 +53,7 @@ const InputArea = ({ ganttData, setGanttData }) => {
       console.log('project not found!')
     );
     setGanttData(newList);
+    localStorage.setItem("ganttDatas", JSON.stringify(ganttData));
     console.log('ganttData', ganttData);
     setTaskData({
       id: null,
