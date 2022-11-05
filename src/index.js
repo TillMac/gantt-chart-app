@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
+import TotalViewGanttArea, { loader as totalViewGanttDataLoader } from './component/TotalViewGanttArea';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import GanttArea,  { loader as ganttDataLoader } from './component/GanttArea';
 import ErrorPage from './component/ErrorPage';
@@ -17,6 +18,11 @@ const route = createBrowserRouter([
         path: 'projects/:name',
         element: <GanttArea />,
         loader: ganttDataLoader,
+      },
+      {
+        index: true,
+        element: <TotalViewGanttArea />,
+        loader: totalViewGanttDataLoader,
       },
     ]
   }

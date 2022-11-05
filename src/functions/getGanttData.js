@@ -17,3 +17,23 @@ export const getGanttData = async(id) => {
     return filteredGanttData;
   };
 };
+
+export const getTotalGanttData = async() => {
+  const ganttDatas = await localStorage.getItem("ganttDatas");
+  const ganttData = JSON.parse(ganttDatas);
+  const newData = ganttData.map(project => {
+    return {
+      ...project,
+      list: project.list.map(task => {
+        console.log(task);
+        return {
+          ...task,
+          start: new Date(task.start),
+          end: new Date(task.end),
+        };
+      }),
+    }
+  });
+  console.log(newData);
+  return newData;
+};
