@@ -11,9 +11,8 @@ import {
 	ListItemText,
 } from '@mui/material';
 import { useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { deleteProjectCat } from '../../store/projectCatSlice';
 import DeleteButton from './ChangeList/DeleteButton';
 import CreateListItem from './CreateListItem/CreateListItem';
 
@@ -22,7 +21,6 @@ const drawerWidth = 240;
 const Sidebar = () => {
 	const [clickCreate, setClickCreate] = useState(false);
 	const projects = useSelector((state) => state.projectCategories);
-	const dispatch = useDispatch();
 
 	// const catDeleteHandler = (projectId) => {
 	// 	console.log(projectId);
