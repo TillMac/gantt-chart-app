@@ -1,10 +1,10 @@
 // const testData = [
 //   {
-//     projectName: 'Project #1',
+//     projectName: 'Project1',
 //     list: [
 //       {
-//       name: 'Project #1',
-//       project: 'project#1',
+//       name: 'Project1',
+//       project: 'project1',
 //       id: 1,
 //       start: new Date(2020, 1, 6),
 //       end: new Date(2020, 1, 10),
@@ -15,8 +15,8 @@
 //     },
 //     {
 //       name: 'Task #1',
-//       project: 'project#1',
-//       id: 1,
+//       project: 'project1',
+//       id: 2,
 //       start: new Date(2020, 1, 6),
 //       end: new Date(2020, 1, 10),
 //       progress: 45,
@@ -26,8 +26,8 @@
 //     },
 //     {
 //       name: 'Task #2',
-//       project: 'project#1',
-//       id: 1,
+//       project: 'project1',
+//       id: 3,
 //       start: new Date(2020, 1, 6),
 //       end: new Date(2020, 1, 10),
 //       progress: 45,
