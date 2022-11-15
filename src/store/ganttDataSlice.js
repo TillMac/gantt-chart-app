@@ -38,7 +38,7 @@ export const ganttDataSlice = createSlice({
 	name: 'ganttDataRedux',
 	initialState,
 	reducers: {
-		addGanttData: (state, action) => {
+		addTaskIntoGanttData: (state, action) => {
 			const result = state.some(
 				(project) => project.name === action.payload.project
 			);
@@ -58,8 +58,19 @@ export const ganttDataSlice = createSlice({
 				? state.push(action.payload)
 				: console.log('this project already exist!');
 		},
+		deleteProjectFromGanttData: (state, action) => {
+			const project = state.find((project) => project.id === action.payload);
+			if (project !== undefined) {
+				const projectIndex = state.indexOf(project);
+				state.splice(projectIndex, 1);
+			}
+		},
 	},
 });
 
-export const { addGanttData, addProjectIntoGanttData } = ganttDataSlice.actions;
+export const {
+	addTaskIntoGanttData,
+	addProjectIntoGanttData,
+	deleteProjectFromGanttData,
+} = ganttDataSlice.actions;
 export default ganttDataSlice.reducer;

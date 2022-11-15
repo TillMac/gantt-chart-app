@@ -10,13 +10,17 @@ export const projectCatSlice = createSlice({
 			state.push(action.payload);
 		},
 		deleteProjectCat: (state, action) => {
-			const removeProjectId = action.payload.id;
-			state = state.filter((project) => {
-				return project.id !== removeProjectId;
-			});
+			// state = state.filter((project) => {
+			// 	return project.id !== action.payload.id;
+			// });
+			const project = state.find((project) => project.id === action.payload);
+			if (project !== undefined) {
+				const projectIndex = state.indexOf(project);
+				state.splice(projectIndex, 1);
+			}
 		},
 		editProjectCat: (state, action) => {
-			const project = state.find((project) => project.id === action.payload.id);
+			const project = state.find((project) => project.id === action.payload);
 			if (project !== undefined) {
 				const projectIndex = state.indexOf(project);
 				state.splice(projectIndex, 1, action.payload);
