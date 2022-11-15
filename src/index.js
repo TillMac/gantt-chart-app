@@ -2,34 +2,36 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
-import TotalViewGanttArea, { loader as totalViewGanttDataLoader } from './component/TotalViewGanttArea';
+import TotalViewGanttArea from './component/TotalViewGanttArea';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
-import GanttArea,  { loader as ganttDataLoader } from './component/GanttArea';
+import GanttArea from './component/GanttArea';
 import ErrorPage from './component/ErrorPage';
+import { Provider } from 'react-redux';
+import { store } from './store/index';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 const route = createBrowserRouter([
-  {
-    path: '/',
-    element: <App />,
-    errorElement: <ErrorPage />,
-    children: [
-      {
-        path: 'projects/:name',
-        element: <GanttArea />,
-        loader: ganttDataLoader,
-      },
-      {
-        index: true,
-        element: <TotalViewGanttArea />,
-        loader: totalViewGanttDataLoader,
-      },
-    ]
-  }
+	{
+		path: '/',
+		element: <App />,
+		errorElement: <ErrorPage />,
+		children: [
+			{
+				path: 'projects/:name',
+				element: <GanttArea />,
+			},
+			{
+				index: true,
+				element: <TotalViewGanttArea />,
+			},
+		],
+	},
 ]);
 
 root.render(
-  <React.StrictMode>
-    <RouterProvider router={route} />
-  </React.StrictMode>
+	<React.StrictMode>
+		<Provider store={store}>
+			<RouterProvider router={route} />
+		</Provider>
+	</React.StrictMode>
 );
