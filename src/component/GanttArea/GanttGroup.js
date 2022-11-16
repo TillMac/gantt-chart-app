@@ -9,6 +9,7 @@ export const GanttGroup = ({ project }) => {
 	const dispatch = useDispatch();
 
 	const taskDeleteHandler = (task) => {
+		console.log(task);
 		const conf = window.confirm(`Are you sure about delete ${task.name} ?`);
 		!!conf && dispatch(deleteTaskFromGanttData(task));
 	};
