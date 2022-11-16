@@ -51,11 +51,14 @@ export const ganttDataSlice = createSlice({
 				: console.log('project not found.');
 		},
 		deleteTaskFromGanttData: (state, action) => {
-			const task = action.payload;
+			// const task = action.payload;
 			const taskInWhichProject = state.find(
-				(project) => project.name === task.project
+				(project) => project.name === action.payload.project
 			);
 			const projectIndex = state.indexOf(taskInWhichProject);
+			const task = state[projectIndex].list.find(
+				(task) => task.id === action.payload.id
+			);
 			const taskIndex = state[projectIndex].list.indexOf(task);
 			state[projectIndex].list.splice(taskIndex, 1);
 			// state[projectIndex].list.splice()
