@@ -13,11 +13,11 @@ import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { v4 as uuidv4 } from 'uuid';
 import { useDispatch, useSelector } from 'react-redux';
-import { addGanttData } from '../../store/ganttDataSlice';
+import { addTaskIntoGanttData } from '../../store/ganttDataSlice';
 
 import { useState } from 'react';
 
-const InputArea = ({ ganttData, setGanttData }) => {
+const InputArea = () => {
 	const categories = useSelector((state) => state.projectCategories);
 	const ganttDataRedux = useSelector((state) => state.ganttDataRedux);
 	const dispatch = useDispatch();
@@ -56,7 +56,7 @@ const InputArea = ({ ganttData, setGanttData }) => {
 
 	const submitHandler = (e) => {
 		e.preventDefault();
-		dispatch(addGanttData(taskData));
+		dispatch(addTaskIntoGanttData(taskData));
 		console.log('ganttDataRedux', ganttDataRedux);
 		// const newList = ganttData;
 		// const result = ganttData.some(project => project.name === taskData.project);

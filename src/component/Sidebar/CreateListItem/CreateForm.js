@@ -13,12 +13,7 @@ import { useDispatch } from 'react-redux';
 import { addProjectCat } from '../../../store/projectCatSlice';
 import { addProjectIntoGanttData } from '../../../store/ganttDataSlice';
 
-const CreateForm = ({
-	clickCreate,
-	setClickCreate,
-	ganttData,
-	setGanttData,
-}) => {
+const CreateForm = ({ clickCreate, setClickCreate }) => {
 	const cancelCreateHandler = () => setClickCreate(!clickCreate);
 	const dispatch = useDispatch();
 
@@ -50,10 +45,6 @@ const CreateForm = ({
 		});
 		setClickCreate(!clickCreate);
 	};
-
-	useEffect(() => {
-		localStorage.setItem('ganttDatas', JSON.stringify(ganttData));
-	}, [ganttData]);
 
 	return (
 		<List sx={{ display: 'flex', mt: 1.5 }}>

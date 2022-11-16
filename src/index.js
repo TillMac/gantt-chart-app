@@ -4,7 +4,7 @@ import './index.css';
 import App from './App';
 import TotalViewGanttArea from './component/TotalViewGanttArea';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
-import GanttArea from './component/GanttArea';
+import GanttArea from './component/GanttArea/GanttArea';
 import ErrorPage from './component/ErrorPage';
 import { Provider } from 'react-redux';
 import { store } from './store/index';

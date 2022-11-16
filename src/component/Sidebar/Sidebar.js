@@ -13,13 +13,19 @@ import {
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
+import DeleteButton from './ChangeList/DeleteButton';
 import CreateListItem from './CreateListItem/CreateListItem';
 
 const drawerWidth = 240;
 
-const Sidebar = ({ ganttData, setGanttData }) => {
+const Sidebar = () => {
 	const [clickCreate, setClickCreate] = useState(false);
 	const projects = useSelector((state) => state.projectCategories);
+
+	// const catDeleteHandler = (projectId) => {
+	// 	console.log(projectId);
+	// 	dispatch(deleteProjectCat(projectId));
+	// };
 
 	return (
 		<Drawer
@@ -76,19 +82,19 @@ const Sidebar = ({ ganttData, setGanttData }) => {
 							}}>
 							{projects.map((project) => {
 								return (
-									<Link
-										to={`/projects/${project.name}`}
-										style={{ textDecoration: 'none', color: 'inherit' }}
-										key={project.id}>
-										<ListItem>
+									<ListItem key={project.id}>
+										<Link
+											to={`/projects/${project.name}`}
+											style={{ textDecoration: 'none', color: 'inherit' }}>
 											<ListItemButton>
 												<ListItemIcon>
 													<Folder />
 												</ListItemIcon>
 												<ListItemText primary={project.projectName} />
 											</ListItemButton>
-										</ListItem>
-									</Link>
+										</Link>
+										<DeleteButton project={project} />
+									</ListItem>
 								);
 							})}
 						</List>
@@ -96,8 +102,6 @@ const Sidebar = ({ ganttData, setGanttData }) => {
 						<CreateListItem
 							clickCreate={clickCreate}
 							setClickCreate={setClickCreate}
-							ganttData={ganttData}
-							setGanttData={setGanttData}
 						/>
 					</>
 				) : (
@@ -106,8 +110,6 @@ const Sidebar = ({ ganttData, setGanttData }) => {
 						<CreateListItem
 							clickCreate={clickCreate}
 							setClickCreate={setClickCreate}
-							ganttData={ganttData}
-							setGanttData={setGanttData}
 						/>
 					</>
 				)}
