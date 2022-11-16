@@ -50,6 +50,18 @@ export const ganttDataSlice = createSlice({
 				  })
 				: console.log('project not found.');
 		},
+		editTaskNameInGanttData: (state, action) => {
+			const newTask = action.payload;
+			const taskInWhichProject = state.find(
+				(projectHere) => projectHere.name === newTask.project
+			);
+			const projectIndex = state.indexOf(taskInWhichProject);
+			state[projectIndex].list.forEach((task) => {
+				if (task.id === newTask.id) {
+					task.name = newTask.name;
+				}
+			});
+		},
 		deleteTaskFromGanttData: (state, action) => {
 			// const task = action.payload;
 			const taskInWhichProject = state.find(
@@ -71,6 +83,20 @@ export const ganttDataSlice = createSlice({
 				? state.push(action.payload)
 				: console.log('this project already exist!');
 		},
+		editProjectInGanttData: (state, action) => {
+			const editedProject = action.payload;
+			const project = state.find((project) => project.id === editedProject.id);
+			const projectIndex = state.indexOf(project);
+			state[projectIndex].name = editedProject.name;
+			state[projectIndex].projectName = editedProject.projectName;
+			if (state[projectIndex].list.length > 0) {
+				state[projectIndex].list.forEach((task) => {
+					if (task.project !== editedProject.name) {
+						task.project = editedProject.name;
+					}
+				});
+			}
+		},
 		deleteProjectFromGanttData: (state, action) => {
 			const project = state.find((project) => project.id === action.payload);
 			if (project !== undefined) {
@@ -83,8 +109,10 @@ export const ganttDataSlice = createSlice({
 
 export const {
 	addTaskIntoGanttData,
+	editTaskNameInGanttData,
 	deleteTaskFromGanttData,
 	addProjectIntoGanttData,
 	deleteProjectFromGanttData,
+	editProjectInGanttData,
 } = ganttDataSlice.actions;
 export default ganttDataSlice.reducer;

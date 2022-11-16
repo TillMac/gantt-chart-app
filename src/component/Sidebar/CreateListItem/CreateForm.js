@@ -7,7 +7,7 @@ import {
 	IconButton,
 	Input,
 } from '@mui/material';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { useDispatch } from 'react-redux';
 import { addProjectCat } from '../../../store/projectCatSlice';

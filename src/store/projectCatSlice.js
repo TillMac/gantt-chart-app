@@ -20,11 +20,11 @@ export const projectCatSlice = createSlice({
 			}
 		},
 		editProjectCat: (state, action) => {
-			const project = state.find((project) => project.id === action.payload);
-			if (project !== undefined) {
-				const projectIndex = state.indexOf(project);
-				state.splice(projectIndex, 1, action.payload);
-			}
+			const editedProject = action.payload;
+			const project = state.find((project) => project.id === editedProject.id);
+			const projectIndex = state.indexOf(project);
+			state[projectIndex].name = editedProject.name;
+			state[projectIndex].projectName = editedProject.projectName;
 		},
 	},
 });

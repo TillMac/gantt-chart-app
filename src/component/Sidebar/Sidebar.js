@@ -14,6 +14,7 @@ import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import DeleteButton from './ChangeList/DeleteButton';
+import { EditButton } from './ChangeList/EditButton';
 import CreateListItem from './CreateListItem/CreateListItem';
 
 const drawerWidth = 240;
@@ -93,6 +94,7 @@ const Sidebar = () => {
 												<ListItemText primary={project.projectName} />
 											</ListItemButton>
 										</Link>
+										<EditButton project={project} />
 										<DeleteButton project={project} />
 									</ListItem>
 								);
