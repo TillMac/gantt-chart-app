@@ -13,7 +13,7 @@ export const EditButton = ({ project }) => {
 		const prompt = window.prompt('Please enter a new project name：').trim();
 		if (prompt !== undefined && prompt !== '') {
 			editedCatName = {
-				projectName: prompt.trim(),
+				projectName: prompt,
 				name: prompt.replace(/\s*/g, ''),
 				id: project.id,
 			};

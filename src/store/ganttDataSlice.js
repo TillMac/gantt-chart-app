@@ -50,6 +50,18 @@ export const ganttDataSlice = createSlice({
 				  })
 				: console.log('project not found.');
 		},
+		editTaskNameInGanttData: (state, action) => {
+			const newTask = action.payload;
+			const taskInWhichProject = state.find(
+				(projectHere) => projectHere.name === newTask.project
+			);
+			const projectIndex = state.indexOf(taskInWhichProject);
+			state[projectIndex].list.forEach((task) => {
+				if (task.id === newTask.id) {
+					task.name = newTask.name;
+				}
+			});
+		},
 		deleteTaskFromGanttData: (state, action) => {
 			// const task = action.payload;
 			const taskInWhichProject = state.find(
@@ -97,6 +109,7 @@ export const ganttDataSlice = createSlice({
 
 export const {
 	addTaskIntoGanttData,
+	editTaskNameInGanttData,
 	deleteTaskFromGanttData,
 	addProjectIntoGanttData,
 	deleteProjectFromGanttData,
