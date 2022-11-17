@@ -19,7 +19,6 @@ import { useState } from 'react';
 
 const InputArea = () => {
 	const categories = useSelector((state) => state.projectCategories);
-	const ganttDataRedux = useSelector((state) => state.ganttDataRedux);
 	const dispatch = useDispatch();
 	const [taskData, setTaskData] = useState({
 		id: null,
@@ -57,21 +56,6 @@ const InputArea = () => {
 	const submitHandler = (e) => {
 		e.preventDefault();
 		dispatch(addTaskIntoGanttData(taskData));
-		console.log('ganttDataRedux', ganttDataRedux);
-		// const newList = ganttData;
-		// const result = ganttData.some(project => project.name === taskData.project);
-		// (result) ? (
-		//   newList.forEach(project => {
-		//     if (project.name === taskData.project) {
-		//       project.list.push(taskData);
-		//     };
-		//   })
-		// ) : (
-		//   console.log('project not found!')
-		// );
-		// setGanttData(newList);
-		// localStorage.setItem("ganttDatas", JSON.stringify(ganttData));
-		// console.log('ganttData', ganttData);
 		setTaskData({
 			id: null,
 			name: '',
@@ -125,7 +109,6 @@ const InputArea = () => {
 								label='Project Name'
 								onChange={projectNameHandler}
 								value={taskData.project}>
-								{/* 原本下方 categories 為 ganttData */}
 								{categories.map((projects) => {
 									return (
 										<MenuItem value={projects.name} key={projects.name}>
