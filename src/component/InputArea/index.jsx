@@ -19,7 +19,6 @@ import { useState } from 'react';
 
 const InputArea = () => {
 	const categories = useSelector((state) => state.projectCategories);
-	const ganttDataRedux = useSelector((state) => state.ganttDataRedux);
 	const dispatch = useDispatch();
 	const [taskData, setTaskData] = useState({
 		id: null,
@@ -30,6 +29,7 @@ const InputArea = () => {
 		end: null,
 		progress: 0,
 	});
+	const [isDateNotValid, setIsDateNotValid] = useState(true);
 
 	const taskNameHandler = (e) => {
 		setTaskData({
@@ -56,31 +56,19 @@ const InputArea = () => {
 
 	const submitHandler = (e) => {
 		e.preventDefault();
-		dispatch(addTaskIntoGanttData(taskData));
-		console.log('ganttDataRedux', ganttDataRedux);
-		// const newList = ganttData;
-		// const result = ganttData.some(project => project.name === taskData.project);
-		// (result) ? (
-		//   newList.forEach(project => {
-		//     if (project.name === taskData.project) {
-		//       project.list.push(taskData);
-		//     };
-		//   })
-		// ) : (
-		//   console.log('project not found!')
-		// );
-		// setGanttData(newList);
-		// localStorage.setItem("ganttDatas", JSON.stringify(ganttData));
-		// console.log('ganttData', ganttData);
-		setTaskData({
-			id: null,
-			name: '',
-			project: '',
-			type: '',
-			start: null,
-			end: null,
-			progress: 0,
-		});
+		if (isDateNotValid === false) {
+			dispatch(addTaskIntoGanttData(taskData));
+			setTaskData({
+				id: null,
+				name: '',
+				project: '',
+				type: '',
+				start: null,
+				end: null,
+				progress: 0,
+			});
+			setIsDateNotValid(true);
+		}
 	};
 
 	return (
@@ -109,7 +97,7 @@ const InputArea = () => {
 						flexWrap: 'wrap',
 					}}>
 					<Stack direction='row' spacing={2.5} sx={{ position: 'relative' }}>
-						<FormControl sx={{ minWidth: '150px' }}>
+						<FormControl sx={{ minWidth: '150px' }} required='true'>
 							<InputLabel htmlFor='component-outlined'>Task Name</InputLabel>
 							<OutlinedInput
 								id='component-outlined'
@@ -119,13 +107,12 @@ const InputArea = () => {
 								value={taskData.name}
 							/>
 						</FormControl>
-						<FormControl sx={{ minWidth: '150px' }}>
+						<FormControl sx={{ minWidth: '150px' }} required='true'>
 							<InputLabel>Project Name</InputLabel>
 							<Select
 								label='Project Name'
 								onChange={projectNameHandler}
 								value={taskData.project}>
-								{/* 原本下方 categories 為 ganttData */}
 								{categories.map((projects) => {
 									return (
 										<MenuItem value={projects.name} key={projects.name}>
@@ -135,7 +122,7 @@ const InputArea = () => {
 								})}
 							</Select>
 						</FormControl>
-						<FormControl sx={{ minWidth: '150px' }}>
+						<FormControl sx={{ minWidth: '150px' }} required='true'>
 							<InputLabel>Task Type</InputLabel>
 							<Select
 								label='Task Type'
@@ -156,6 +143,9 @@ const InputArea = () => {
 											...taskData,
 											start: startDate.$d,
 										});
+										if (taskData.end !== null) {
+											setIsDateNotValid(false);
+										}
 									}}
 									renderInput={(params) => <TextField {...params} />}
 								/>
@@ -173,6 +163,9 @@ const InputArea = () => {
 											...taskData,
 											end: deadline.$d,
 										});
+										if (taskData.start !== null) {
+											setIsDateNotValid(false);
+										}
 									}}
 									renderInput={(params) => <TextField {...params} />}
 								/>
@@ -188,7 +181,8 @@ const InputArea = () => {
 							mt: 2,
 							backgroundColor: (theme) => theme.palette.other.btn,
 							color: (theme) => theme.palette.other.white,
-						}}>
+						}}
+						disabled={isDateNotValid}>
 						新增事項
 					</Button>
 				</form>

@@ -25,7 +25,6 @@ const CreateForm = ({ clickCreate, setClickCreate }) => {
 		const result = ganttCatData.some(
 			(projectCat) => projectCat.name === e.target.value.replace(/\s*/g, '')
 		);
-		console.log('result', result);
 		if (
 			e.target.value.match(
 				/^[\u4e00-\u9fa5_a-zA-Z0-9_\x20_\u3105-\u3129\u02CA\u02C7\u02CB\u02D9_-]+$/
@@ -41,8 +40,6 @@ const CreateForm = ({ clickCreate, setClickCreate }) => {
 			});
 		} else {
 			setIsInputError(true);
-			// console.log(e.target.value);
-			console.log('isInputError', isInputError);
 		}
 	};
 
@@ -76,7 +73,6 @@ const CreateForm = ({ clickCreate, setClickCreate }) => {
 						id='component-outlined'
 						label='新事項名稱'
 						placeholder='輸入新事項名稱...'
-						// inputRef={inputProjectRef}
 						onChange={inputHandler}
 					/>
 				</FormControl>
