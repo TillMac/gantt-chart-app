@@ -9,7 +9,7 @@ import {
 } from '@mui/material';
 import { useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { addProjectCat } from '../../../store/projectCatSlice';
 import { addProjectIntoGanttData } from '../../../store/ganttDataSlice';
 
@@ -17,15 +17,21 @@ const CreateForm = ({ clickCreate, setClickCreate }) => {
 	const cancelCreateHandler = () => setClickCreate(!clickCreate);
 	const [isInputError, setIsInputError] = useState(false);
 	const dispatch = useDispatch();
+	const ganttCatData = useSelector((state) => state.ganttDataRedux);
 
 	const [catData, setCatData] = useState({});
 
 	const inputHandler = (e) => {
+		const result = ganttCatData.some(
+			(projectCat) => projectCat.name === e.target.value.replace(/\s*/g, '')
+		);
+		console.log('result', result);
 		if (
 			e.target.value.match(
 				/^[\u4e00-\u9fa5_a-zA-Z0-9_\x20_\u3105-\u3129\u02CA\u02C7\u02CB\u02D9_-]+$/
 			) !== null &&
-			e.target.value.trim() !== ''
+			e.target.value.trim() !== '' &&
+			result === false
 		) {
 			setIsInputError(false);
 			setCatData({
@@ -35,7 +41,7 @@ const CreateForm = ({ clickCreate, setClickCreate }) => {
 			});
 		} else {
 			setIsInputError(true);
-			console.log(e.target.value);
+			// console.log(e.target.value);
 			console.log('isInputError', isInputError);
 		}
 	};
