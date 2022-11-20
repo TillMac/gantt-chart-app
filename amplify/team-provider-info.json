@@ -1,0 +1,20 @@
+{
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-ganttchartapp-dev-183443-authRole",
+      "UnauthRoleArn": "arn:aws:iam::334117871790:role/amplify-ganttchartapp-dev-183443-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::334117871790:role/amplify-ganttchartapp-dev-183443-authRole",
+      "Region": "us-east-1",
+      "DeploymentBucketName": "amplify-ganttchartapp-dev-183443-deployment",
+      "UnauthRoleName": "amplify-ganttchartapp-dev-183443-unauthRole",
+      "StackName": "amplify-ganttchartapp-dev-183443",
+      "StackId": "arn:aws:cloudformation:us-east-1:334117871790:stack/amplify-ganttchartapp-dev-183443/f4a78e50-68be-11ed-9814-0eea8eb3e84f",
+      "AmplifyAppId": "dg8ra2pjdddfv"
+    },
+    "categories": {
+      "auth": {
+        "ganttchartappb13bb1cd": {}
+      }
+    }
+  }
+}

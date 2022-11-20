@@ -11,8 +11,8 @@ const Theme = createTheme({
 		login: {
 			pink: '#EAC4D5',
 			yellow: '#FFCF77',
-			green: '567568',
-			gray: '686963',
+			green: '#567568',
+			gray: '#686963',
 		},
 		other: {
 			white: 'white',
