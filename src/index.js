@@ -6,6 +6,7 @@ import TotalViewGanttArea from './component/TotalViewGanttArea';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import GanttArea from './component/GanttArea/GanttArea';
 import ErrorPage from './component/ErrorPage';
+import LogIn from './pages/LogIn';
 import { Provider } from 'react-redux';
 import { store } from './store/index';
 
@@ -25,6 +26,11 @@ const route = createBrowserRouter([
 				element: <TotalViewGanttArea />,
 			},
 		],
+	},
+	{
+		path: '/login',
+		element: <LogIn />,
+		errorElement: <ErrorPage />,
 	},
 ]);
 
