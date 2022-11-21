@@ -1,8 +1,8 @@
 import { Box } from '@mui/material';
-import { Gantt } from 'gantt-task-react';
+import { Gantt, ViewMode } from 'gantt-task-react';
 import React from 'react';
 import 'gantt-task-react/dist/index.css';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import {
 	deleteTaskFromGanttData,
 	editTaskNameInGanttData,
@@ -10,6 +10,16 @@ import {
 
 export const GanttGroup = ({ project }) => {
 	const dispatch = useDispatch();
+	const timeView = useSelector((state) => state.timeView);
+
+	let columnWidth = 65;
+	if (timeView.view === ViewMode.Year) {
+		columnWidth = 350;
+	} else if (timeView.view === ViewMode.Month) {
+		columnWidth = 300;
+	} else if (timeView.view === ViewMode.Week) {
+		columnWidth = 250;
+	}
 
 	const deleteTaskHandler = (task) => {
 		const conf = window.confirm(`Are you sure about delete ${task.name} ?`);
@@ -37,6 +47,8 @@ export const GanttGroup = ({ project }) => {
 					tasks={project.list}
 					onDelete={deleteTaskHandler}
 					onDoubleClick={editTaskHandler}
+					viewMode={timeView.view}
+					columnWidth={columnWidth}
 				/>
 			) : (
 				<p>There's no data yet!</p>

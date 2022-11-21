@@ -14,6 +14,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { v4 as uuidv4 } from 'uuid';
 import { useDispatch, useSelector } from 'react-redux';
 import { addTaskIntoGanttData } from '../../store/ganttDataSlice';
+import { changeView } from '../../store/timeViewSlice';
 
 import { useState } from 'react';
 
@@ -71,8 +72,17 @@ const InputArea = () => {
 		}
 	};
 
+	const timeViewHandler = (e) => {
+		const time = e.target.value;
+		dispatch(
+			changeView({
+				view: time,
+			})
+		);
+	};
+
 	return (
-		<Box sx={{ width: '100%', display: 'flex' }}>
+		<Box sx={{ width: '100%', display: 'flex', flexWrap: 'wrap' }}>
 			<Box
 				sx={{
 					width: '90%',
@@ -97,7 +107,7 @@ const InputArea = () => {
 						flexWrap: 'wrap',
 					}}>
 					<Stack direction='row' spacing={2.5} sx={{ position: 'relative' }}>
-						<FormControl sx={{ minWidth: '150px' }} required='true'>
+						<FormControl sx={{ minWidth: '150px' }} required={true}>
 							<InputLabel htmlFor='component-outlined'>Task Name</InputLabel>
 							<OutlinedInput
 								id='component-outlined'
@@ -107,7 +117,7 @@ const InputArea = () => {
 								value={taskData.name}
 							/>
 						</FormControl>
-						<FormControl sx={{ minWidth: '150px' }} required='true'>
+						<FormControl sx={{ minWidth: '150px' }} required={true}>
 							<InputLabel>Project Name</InputLabel>
 							<Select
 								label='Project Name'
@@ -122,7 +132,7 @@ const InputArea = () => {
 								})}
 							</Select>
 						</FormControl>
-						<FormControl sx={{ minWidth: '150px' }} required='true'>
+						<FormControl sx={{ minWidth: '150px' }} required={true}>
 							<InputLabel>Task Type</InputLabel>
 							<Select
 								label='Task Type'
@@ -188,6 +198,39 @@ const InputArea = () => {
 						新增事項
 					</Button>
 				</form>
+			</Box>
+			<Box
+				sx={{
+					width: '90%',
+					display: 'flex',
+					flexDirection: 'row-reverse',
+					ml: 'auto',
+					mr: 'auto',
+				}}>
+				<FormControl
+					sx={{
+						minWidth: '150px',
+					}}>
+					<InputLabel>時間刻度</InputLabel>
+					<Select
+						label='時間刻度'
+						defaultValue='Day'
+						sx={{ borderRadius: 2 }}
+						onChange={timeViewHandler}>
+						<MenuItem value={'Day'} key={'Day'}>
+							Day
+						</MenuItem>
+						<MenuItem value={'Week'} key={'Week'}>
+							Week
+						</MenuItem>
+						<MenuItem value={'Month'} key={'Month'}>
+							Month
+						</MenuItem>
+						<MenuItem value={'Year'} key={'Year'}>
+							Year
+						</MenuItem>
+					</Select>
+				</FormControl>
 			</Box>
 		</Box>
 	);
