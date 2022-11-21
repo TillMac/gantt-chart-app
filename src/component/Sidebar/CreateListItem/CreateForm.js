@@ -15,7 +15,7 @@ import { addProjectIntoGanttData } from '../../../store/ganttDataSlice';
 
 const CreateForm = ({ clickCreate, setClickCreate }) => {
 	const cancelCreateHandler = () => setClickCreate(!clickCreate);
-	const [isInputError, setIsInputError] = useState(false);
+	const [isInputError, setIsInputError] = useState(true);
 	const dispatch = useDispatch();
 	const ganttCatData = useSelector((state) => state.ganttDataRedux);
 
@@ -74,6 +74,7 @@ const CreateForm = ({ clickCreate, setClickCreate }) => {
 						label='新事項名稱'
 						placeholder='輸入新事項名稱...'
 						onChange={inputHandler}
+						autoFocus='true'
 					/>
 				</FormControl>
 				<ListItem sx={{ pl: 0, pr: 0, maxWidth: '60px' }}>
