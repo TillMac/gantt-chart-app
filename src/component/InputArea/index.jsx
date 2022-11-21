@@ -139,10 +139,11 @@ const InputArea = () => {
 									label='Start Date'
 									value={taskData.start}
 									onChange={(startDate) => {
-										setTaskData({
-											...taskData,
-											start: startDate.$d,
-										});
+										startDate !== null &&
+											setTaskData({
+												...taskData,
+												start: startDate.$d,
+											});
 										if (taskData.end !== null) {
 											setIsDateNotValid(false);
 										}
@@ -159,10 +160,11 @@ const InputArea = () => {
 									label='Deadline'
 									value={taskData.end}
 									onChange={(deadline) => {
-										setTaskData({
-											...taskData,
-											end: deadline.$d,
-										});
+										deadline !== null &&
+											setTaskData({
+												...taskData,
+												end: deadline.$d,
+											});
 										if (taskData.start !== null) {
 											setIsDateNotValid(false);
 										}
