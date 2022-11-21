@@ -38,7 +38,20 @@ const TotalViewGanttArea = () => {
 					);
 				})
 			) : (
-				<p>There's no data here, please create a new project!</p>
+				<Box
+					sx={{
+						display: 'flex',
+						width: '100%',
+						textAlign: 'center',
+						alignItems: 'center',
+						justifyContent: 'center',
+						height: '75vh',
+						color: (theme) => theme.palette.other.text,
+					}}>
+					<p style={{ width: '100%', fontSize: '24px', fontWeight: '400' }}>
+						There's no data here, please create a new project!
+					</p>
+				</Box>
 			)}
 		</Box>
 	);
