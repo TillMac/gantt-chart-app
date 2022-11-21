@@ -20,19 +20,27 @@ const ErrorPage = () => {
 					height: '100vh',
 					margin: 'auto',
 				}}>
-				<img
-					src={errorImg}
-					alt='404 Error'
-					style={{ margin: 'auto', width: '40%', display: 'block' }}
-				/>
-				<div style={{ marginLeft: 'auto', marginRight: 'auto', width: '100%' }}>
+				<Box
+					sx={{
+						margin: 'auto',
+						width: {
+							xs: 300,
+							sm: 350,
+							md: 400,
+							lg: 500,
+							xl: 650,
+						},
+					}}>
+					<img src={errorImg} alt='404 Error' style={{ width: '100%' }} />
+				</Box>
+				<Box sx={{ marginLeft: 'auto', marginRight: 'auto', width: '100%' }}>
 					<p style={{ fontSize: '24px' }}>
 						Oops...Page <i>{error.statusText || error.message}!</i>
 					</p>
 					<Link to={'/'} style={{ textDecoration: 'none', color: 'inherit' }}>
 						<Button size='large'>點擊我回到主頁</Button>
 					</Link>
-				</div>
+				</Box>
 			</div>
 		</Box>
 	);
