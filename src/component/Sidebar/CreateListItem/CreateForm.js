@@ -74,7 +74,7 @@ const CreateForm = ({ clickCreate, setClickCreate }) => {
 						label='新事項名稱'
 						placeholder='輸入新事項名稱...'
 						onChange={inputHandler}
-						autoFocus='true'
+						autoFocus={true}
 					/>
 				</FormControl>
 				<ListItem sx={{ pl: 0, pr: 0, maxWidth: '60px' }}>
