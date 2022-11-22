@@ -1,5 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
+import awsExports from './aws-exports';
+import { Amplify } from 'aws-amplify';
 import './index.css';
 import App from './App';
 import TotalViewGanttArea from './component/TotalViewGanttArea';
@@ -9,6 +11,9 @@ import ErrorPage from './component/ErrorPage';
 import LogIn from './pages/LogIn';
 import { Provider } from 'react-redux';
 import { store } from './store/index';
+import { Authenticator } from '@aws-amplify/ui-react';
+
+Amplify.configure(awsExports);
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 const route = createBrowserRouter([
@@ -36,8 +41,10 @@ const route = createBrowserRouter([
 
 root.render(
 	<React.StrictMode>
-		<Provider store={store}>
-			<RouterProvider router={route} />
-		</Provider>
+		<Authenticator.Provider>
+			<Provider store={store}>
+				<RouterProvider router={route} />
+			</Provider>
+		</Authenticator.Provider>
 	</React.StrictMode>
 );

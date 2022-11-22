@@ -1,15 +1,22 @@
 import { Box, Container } from '@mui/material';
-import { Authenticator } from '@aws-amplify/ui-react';
-import { Amplify } from 'aws-amplify';
-import config from '../aws-exports';
-import React from 'react';
-
+import { Authenticator, useAuthenticator } from '@aws-amplify/ui-react';
 import '@aws-amplify/ui-react/styles.css';
+import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const logoImg = require('../assets/logo.png');
 const pplImg = require('../assets/people.png');
 
 const LogIn = () => {
+	const { route } = useAuthenticator((context) => [context.route]);
+	const navigate = useNavigate();
+	let from = '/';
+
+	useEffect(() => {
+		if (route !== 'authenticated') return;
+		navigate(from, { replace: true });
+	}, [route, navigate, from]);
+
 	return (
 		<Box
 			sx={{

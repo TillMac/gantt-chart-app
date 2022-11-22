@@ -1,9 +1,15 @@
-import { AccountCircle, Folder, Inbox } from '@mui/icons-material';
+import {
+	AccountCircle,
+	Folder,
+	Inbox,
+	LogoutOutlined,
+} from '@mui/icons-material';
 import {
 	Box,
 	Container,
 	Divider,
 	Drawer,
+	IconButton,
 	List,
 	ListItem,
 	ListItemButton,
@@ -12,21 +18,24 @@ import {
 } from '@mui/material';
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import DeleteButton from './ChangeList/DeleteButton';
 import { EditButton } from './ChangeList/EditButton';
 import CreateListItem from './CreateListItem/CreateListItem';
+import { useAuthenticator } from '@aws-amplify/ui-react';
 
 const drawerWidth = 240;
 
 const Sidebar = () => {
 	const [clickCreate, setClickCreate] = useState(false);
 	const projects = useSelector((state) => state.projectCategories);
+	const { signOut } = useAuthenticator((context) => [context.signOut]);
+	const navigate = useNavigate();
 
-	// const catDeleteHandler = (projectId) => {
-	// 	console.log(projectId);
-	// 	dispatch(deleteProjectCat(projectId));
-	// };
+	const logOutHandler = () => {
+		signOut();
+		navigate('/login');
+	};
 
 	return (
 		<Drawer
@@ -73,7 +82,6 @@ const Sidebar = () => {
 						</ListItem>
 					</List>
 				</Link>
-				{/* 原本以下的 projects 為 ganttData */}
 				{projects.length !== 0 ? (
 					<>
 						<List
@@ -115,6 +123,12 @@ const Sidebar = () => {
 						/>
 					</>
 				)}
+				<IconButton
+					size='large'
+					sx={{ position: 'absolute', bottom: 10, right: 10 }}
+					onClick={logOutHandler}>
+					<LogoutOutlined />
+				</IconButton>
 			</Box>
 		</Drawer>
 	);
