@@ -9,11 +9,24 @@
       "UnauthRoleName": "amplify-ganttchartapp-dev-183443-unauthRole",
       "StackName": "amplify-ganttchartapp-dev-183443",
       "StackId": "arn:aws:cloudformation:us-east-1:334117871790:stack/amplify-ganttchartapp-dev-183443/f4a78e50-68be-11ed-9814-0eea8eb3e84f",
-      "AmplifyAppId": "dg8ra2pjdddfv"
+      "AmplifyAppId": "dg8ra2pjdddfv",
+      "APIGatewayAuthURL": "https://s3.amazonaws.com/amplify-ganttchartapp-dev-183443-deployment/amplify-cfn-templates/api/APIGatewayAuthStack.json"
     },
     "categories": {
       "auth": {
         "ganttchartappb13bb1cd": {}
+      },
+      "function": {
+        "projectCatsFunction": {
+          "deploymentBucketName": "amplify-ganttchartapp-dev-183443-deployment",
+          "s3Key": "amplify-builds/projectCatsFunction-626d3778433274723169-build.zip"
+        }
+      },
+      "storage": {
+        "projectCatsDb": {}
+      },
+      "api": {
+        "projectCatsApi": {}
       }
     }
   }

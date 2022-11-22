@@ -1,0 +1,14 @@
+{
+  "resourceName": "projectCatsDb",
+  "tableName": "projectCatsDb",
+  "partitionKey": {
+    "fieldName": "name",
+    "fieldType": "string"
+  },
+  "sortKey": {
+    "fieldName": "updatedAt",
+    "fieldType": "string"
+  },
+  "gsi": [],
+  "triggerFunctions": []
+}
