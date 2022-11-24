@@ -18,7 +18,7 @@ import {
 } from '@mui/material';
 import { useEffect, useRef, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { Link, useNavigate } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import DeleteButton from './ChangeList/DeleteButton';
 import { EditButton } from './ChangeList/EditButton';
 import CreateListItem from './CreateListItem/CreateListItem';
@@ -81,49 +81,68 @@ const Sidebar = () => {
 					/>
 					<p style={{ fontSize: '24px', marginLeft: '20px' }}>Jennifer</p>
 				</Container>
-				<Link to={'/'} style={{ textDecoration: 'none', color: 'inherit' }}>
-					<List>
-						<ListItem>
-							<ListItemButton>
-								<ListItemIcon>
-									<Inbox />
-								</ListItemIcon>
-								<ListItemText primary='總覽' />
-							</ListItemButton>
-						</ListItem>
-					</List>
-				</Link>
+				<List>
+					<ListItem>
+						<ListItemButton
+							component={NavLink}
+							to={'/'}
+							end
+							sx={{
+								textDecoration: 'none',
+								color: 'inherit',
+								'&.active': {
+									borderBottom: '#8884FF thick double ',
+								},
+							}}>
+							<ListItemIcon>
+								<Inbox />
+							</ListItemIcon>
+							<ListItemText primary='總覽' sx={{ ml: -1 }} />
+						</ListItemButton>
+					</ListItem>
+				</List>
 				{projects.cats.length !== 0 ? (
 					<>
+						<CreateListItem
+							clickCreate={clickCreate}
+							setClickCreate={setClickCreate}
+						/>
+						<Divider />
 						<List
 							sx={{
-								height: 192,
+								height: 500,
 								overflowY: 'auto',
 							}}>
 							{projects.cats.map((project) => {
 								return (
 									<ListItem key={project.id}>
-										<Link
+										<ListItemButton
+											component={NavLink}
 											to={`/projects/${project.linkName}`}
-											style={{ textDecoration: 'none', color: 'inherit' }}>
-											<ListItemButton>
-												<ListItemIcon>
-													<Folder />
-												</ListItemIcon>
-												<ListItemText primary={project.name} />
-											</ListItemButton>
-										</Link>
-										<EditButton project={project} />
-										<DeleteButton project={project} />
+											end
+											sx={{
+												textDecoration: 'none',
+												color: 'inherit',
+												'&.active': {
+													borderBottom: '#8884FF thick double ',
+												},
+											}}>
+											<ListItemIcon>
+												<Folder />
+											</ListItemIcon>
+											<ListItemText
+												primary={project.name}
+												sx={{
+													ml: -1,
+												}}
+											/>
+											<EditButton project={project} />
+											<DeleteButton project={project} />
+										</ListItemButton>
 									</ListItem>
 								);
 							})}
 						</List>
-						<Divider />
-						<CreateListItem
-							clickCreate={clickCreate}
-							setClickCreate={setClickCreate}
-						/>
 					</>
 				) : (
 					<>
