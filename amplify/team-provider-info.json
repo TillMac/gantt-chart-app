@@ -1,25 +1,25 @@
 {
   "dev": {
     "awscloudformation": {
-      "AuthRoleName": "amplify-ganttchartapp-dev-183443-authRole",
-      "UnauthRoleArn": "arn:aws:iam::334117871790:role/amplify-ganttchartapp-dev-183443-unauthRole",
-      "AuthRoleArn": "arn:aws:iam::334117871790:role/amplify-ganttchartapp-dev-183443-authRole",
+      "AuthRoleName": "amplify-ganttchartapp-dev-154534-authRole",
+      "UnauthRoleArn": "arn:aws:iam::334117871790:role/amplify-ganttchartapp-dev-154534-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::334117871790:role/amplify-ganttchartapp-dev-154534-authRole",
       "Region": "us-east-1",
-      "DeploymentBucketName": "amplify-ganttchartapp-dev-183443-deployment",
-      "UnauthRoleName": "amplify-ganttchartapp-dev-183443-unauthRole",
-      "StackName": "amplify-ganttchartapp-dev-183443",
-      "StackId": "arn:aws:cloudformation:us-east-1:334117871790:stack/amplify-ganttchartapp-dev-183443/f4a78e50-68be-11ed-9814-0eea8eb3e84f",
-      "AmplifyAppId": "dg8ra2pjdddfv",
-      "APIGatewayAuthURL": "https://s3.amazonaws.com/amplify-ganttchartapp-dev-183443-deployment/amplify-cfn-templates/api/APIGatewayAuthStack.json"
+      "DeploymentBucketName": "amplify-ganttchartapp-dev-154534-deployment",
+      "UnauthRoleName": "amplify-ganttchartapp-dev-154534-unauthRole",
+      "StackName": "amplify-ganttchartapp-dev-154534",
+      "StackId": "arn:aws:cloudformation:us-east-1:334117871790:stack/amplify-ganttchartapp-dev-154534/d2bcab40-6b02-11ed-a0e0-0ead4def83c5",
+      "AmplifyAppId": "d3lvodlyuss7g7",
+      "APIGatewayAuthURL": "https://s3.amazonaws.com/amplify-ganttchartapp-dev-154534-deployment/amplify-cfn-templates/api/APIGatewayAuthStack.json"
     },
     "categories": {
       "auth": {
-        "ganttchartappb13bb1cd": {}
+        "ganttchartappbe507b04": {}
       },
       "function": {
         "projectCatsFunction": {
-          "deploymentBucketName": "amplify-ganttchartapp-dev-183443-deployment",
-          "s3Key": "amplify-builds/projectCatsFunction-626d3778433274723169-build.zip"
+          "deploymentBucketName": "amplify-ganttchartapp-dev-154534-deployment",
+          "s3Key": "amplify-builds/projectCatsFunction-4359525276366436585a-build.zip"
         }
       },
       "storage": {

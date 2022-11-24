@@ -41,7 +41,7 @@ export const GanttGroup = ({ project }) => {
 
 	return (
 		<Box key={project.id} sx={{ maxWidth: '90%', ml: 'auto', mr: 'auto' }}>
-			<h3>{project.projectName}</h3>
+			<h3>{project.name}</h3>
 			{project.list.length !== 0 ? (
 				<Gantt
 					tasks={project.list}

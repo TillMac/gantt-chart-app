@@ -25,10 +25,10 @@ if (process.env.ENV && process.env.ENV !== "NONE") {
 const userIdPresent = false; // TODO: update in case is required to use that definition
 const partitionKeyName = "name";
 const partitionKeyType = "S";
-const sortKeyName = "updatedAt";
+const sortKeyName = "createdAt";
 const sortKeyType = "S";
 const hasSortKey = sortKeyName !== "";
-const path = "/categories";
+const path = "/projectcats";
 const UNAUTH = 'UNAUTH';
 const hashKeyPath = '/:' + partitionKeyName;
 const sortKeyPath = hasSortKey ? '/:' + sortKeyName : '';

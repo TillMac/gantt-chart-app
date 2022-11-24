@@ -5,15 +5,20 @@ import { GanttGroup } from '../GanttArea/GanttGroup';
 
 const TotalViewGanttArea = () => {
 	const ganttData = useSelector((state) => state.ganttDataRedux);
-	const allGanttData = ganttData.map((project) => {
+	const allGanttData = ganttData.projects.map((project) => {
+		if (project.list.length !== 0) {
+			return {
+				...project,
+				list: project.list.map((task) => {
+					return {
+						...task,
+						description: 'copy from state',
+					};
+				}),
+			};
+		}
 		return {
 			...project,
-			list: project.list.map((task) => {
-				return {
-					...task,
-					description: 'copy from state',
-				};
-			}),
 		};
 	});
 	return (

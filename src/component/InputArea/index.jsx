@@ -123,7 +123,7 @@ const InputArea = () => {
 								label='Project Name'
 								onChange={projectNameHandler}
 								value={taskData.project}>
-								{categories.map((projects) => {
+								{categories.cats.map((projects) => {
 									return (
 										<MenuItem value={projects.name} key={projects.name}>
 											{projects.projectName}

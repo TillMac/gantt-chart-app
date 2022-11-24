@@ -6,7 +6,7 @@
     "fieldType": "string"
   },
   "sortKey": {
-    "fieldName": "updatedAt",
+    "fieldName": "createdAt",
     "fieldType": "string"
   },
   "gsi": [],

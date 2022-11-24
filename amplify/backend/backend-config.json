@@ -1,6 +1,6 @@
 {
   "auth": {
-    "ganttchartappb13bb1cd": {
+    "ganttchartappbe507b04": {
       "service": "Cognito",
       "providerPlugin": "awscloudformation",
       "dependsOn": [],

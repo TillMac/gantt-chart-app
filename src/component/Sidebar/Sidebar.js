@@ -16,21 +16,32 @@ import {
 	ListItemIcon,
 	ListItemText,
 } from '@mui/material';
-import { useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useEffect, useRef, useState } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import DeleteButton from './ChangeList/DeleteButton';
 import { EditButton } from './ChangeList/EditButton';
 import CreateListItem from './CreateListItem/CreateListItem';
 import { useAuthenticator } from '@aws-amplify/ui-react';
+import { fetchCats } from '../../store/projectCatSlice';
+import { fetchCatsToGantt } from '../../store/ganttDataSlice';
 
 const drawerWidth = 240;
 
 const Sidebar = () => {
 	const [clickCreate, setClickCreate] = useState(false);
+	const dispatch = useDispatch();
 	const projects = useSelector((state) => state.projectCategories);
 	const { signOut } = useAuthenticator((context) => [context.signOut]);
 	const navigate = useNavigate();
+	const isDataFetchedRef = useRef(false);
+
+	useEffect(() => {
+		if (isDataFetchedRef.current) return;
+		dispatch(fetchCats());
+		dispatch(fetchCatsToGantt());
+		isDataFetchedRef.current = true;
+	}, []);
 
 	const logOutHandler = () => {
 		signOut();
@@ -82,24 +93,24 @@ const Sidebar = () => {
 						</ListItem>
 					</List>
 				</Link>
-				{projects.length !== 0 ? (
+				{projects.cats.length !== 0 ? (
 					<>
 						<List
 							sx={{
 								height: 192,
 								overflowY: 'auto',
 							}}>
-							{projects.map((project) => {
+							{projects.cats.map((project) => {
 								return (
 									<ListItem key={project.id}>
 										<Link
-											to={`/projects/${project.name}`}
+											to={`/projects/${project.linkName}`}
 											style={{ textDecoration: 'none', color: 'inherit' }}>
 											<ListItemButton>
 												<ListItemIcon>
 													<Folder />
 												</ListItemIcon>
-												<ListItemText primary={project.projectName} />
+												<ListItemText primary={project.name} />
 											</ListItemButton>
 										</Link>
 										<EditButton project={project} />

@@ -1,35 +1,77 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { API } from 'aws-amplify';
 
-const initialState = [];
+const initialState = {
+	loading: false,
+	cats: [],
+	error: '',
+};
+
+export const fetchCats = createAsyncThunk('projectCategories/fetchCats', () => {
+	return API.get('projectCatsApi', '/projectcats/name');
+});
 
 export const projectCatSlice = createSlice({
 	name: 'projectCategories',
 	initialState,
 	reducers: {
 		addProjectCat: (state, action) => {
-			state.push(action.payload);
+			state.cats.push(action.payload);
 		},
 		deleteProjectCat: (state, action) => {
-			// state = state.filter((project) => {
-			// 	return project.id !== action.payload.id;
-			// });
-			const project = state.find((project) => project.id === action.payload);
+			const project = state.cats.find(
+				(project) => project.id === action.payload
+			);
 			if (project !== undefined) {
-				const projectIndex = state.indexOf(project);
-				state.splice(projectIndex, 1);
+				const projectIndex = state.cats.indexOf(project);
+				state.cats.splice(projectIndex, 1);
 			}
 		},
 		editProjectCat: (state, action) => {
 			const editedProject = action.payload;
-			const project = state.find((project) => project.id === editedProject.id);
-			const projectIndex = state.indexOf(project);
-			state[projectIndex].name = editedProject.name;
-			state[projectIndex].projectName = editedProject.projectName;
+			const project = state.cats.find(
+				(project) => project.id === editedProject.id
+			);
+			const projectIndex = state.cats.indexOf(project);
+			state.cats[projectIndex].name = editedProject.name;
+			state.cats[projectIndex].linkName = editedProject.linkName;
 		},
+	},
+	extraReducers: (builder) => {
+		builder.addCase(fetchCats.pending, (state) => {
+			state.loading = true;
+		});
+		builder.addCase(fetchCats.fulfilled, (state, action) => {
+			state.loading = false;
+			const fetchedProjectCats = action.payload;
+			const newData = fetchedProjectCats.map((cat) => {
+				return {
+					id: cat.id,
+					createdAt: cat.createdAt,
+					upatedAt: cat.updatedAt,
+					name: cat.name,
+					linkName: cat.name,
+				};
+			});
+			console.log('newData', newData);
+			for (let cat of newData) {
+				state.cats.push(cat);
+			}
+			state.error = '';
+		});
+		builder.addCase(fetchCats.rejected, (state, action) => {
+			state.loading = false;
+			state.cats = [];
+			state.error = action.payload;
+		});
 	},
 });
 
-export const { addProjectCat, deleteProjectCat, editProjectCat } =
-	projectCatSlice.actions;
+export const {
+	addProjectCat,
+	deleteProjectCat,
+	editProjectCat,
+	updateProjectCatFromApi,
+} = projectCatSlice.actions;
 
 export default projectCatSlice.reducer;

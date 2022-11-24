@@ -1,4 +1,5 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { API } from 'aws-amplify';
 
 // const initialState = [
 // 	{
@@ -32,7 +33,18 @@ import { createSlice } from '@reduxjs/toolkit';
 // 	},
 // ];
 
-const initialState = [];
+const initialState = {
+	loading: false,
+	projects: [],
+	error: '',
+};
+
+export const fetchCatsToGantt = createAsyncThunk(
+	'ganttDataRedux/fetchCatsToGantt',
+	() => {
+		return API.get('projectCatsApi', '/projectcats/name');
+	}
+);
 
 export const ganttDataSlice = createSlice({
 	name: 'ganttDataRedux',
@@ -63,7 +75,6 @@ export const ganttDataSlice = createSlice({
 			});
 		},
 		deleteTaskFromGanttData: (state, action) => {
-			// const task = action.payload;
 			const taskInWhichProject = state.find(
 				(project) => project.name === action.payload.project
 			);
@@ -73,24 +84,25 @@ export const ganttDataSlice = createSlice({
 			);
 			const taskIndex = state[projectIndex].list.indexOf(task);
 			state[projectIndex].list.splice(taskIndex, 1);
-			// state[projectIndex].list.splice()
 		},
 		addProjectIntoGanttData: (state, action) => {
-			const result = state.some(
+			const result = state.projects.some(
 				(project) => project.name === action.payload.name
 			);
 			!result
-				? state.push(action.payload)
+				? state.projects.push(action.payload)
 				: console.log('this project already exist!');
 		},
 		editProjectInGanttData: (state, action) => {
 			const editedProject = action.payload;
-			const project = state.find((project) => project.id === editedProject.id);
-			const projectIndex = state.indexOf(project);
-			state[projectIndex].name = editedProject.name;
-			state[projectIndex].projectName = editedProject.projectName;
-			if (state[projectIndex].list.length > 0) {
-				state[projectIndex].list.forEach((task) => {
+			const project = state.projects.find(
+				(project) => project.id === editedProject.id
+			);
+			const projectIndex = state.projects.indexOf(project);
+			state.projects[projectIndex].name = editedProject.name;
+			state.projects[projectIndex].linkName = editedProject.linkName;
+			if (state.projects[projectIndex].list.length > 0) {
+				state.projects[projectIndex].list.forEach((task) => {
 					if (task.project !== editedProject.name) {
 						task.project = editedProject.name;
 					}
@@ -98,12 +110,42 @@ export const ganttDataSlice = createSlice({
 			}
 		},
 		deleteProjectFromGanttData: (state, action) => {
-			const project = state.find((project) => project.id === action.payload);
+			const project = state.projects.find(
+				(project) => project.id === action.payload
+			);
 			if (project !== undefined) {
-				const projectIndex = state.indexOf(project);
-				state.splice(projectIndex, 1);
+				const projectIndex = state.projects.indexOf(project);
+				state.projects.splice(projectIndex, 1);
 			}
 		},
+	},
+	extraReducers: (builder) => {
+		builder.addCase(fetchCatsToGantt.pending, (state) => {
+			state.loading = true;
+		});
+		builder.addCase(fetchCatsToGantt.fulfilled, (state, action) => {
+			state.loading = false;
+			const fetchedProjectCats = action.payload;
+			const newData = fetchedProjectCats.map((cat) => {
+				return {
+					id: cat.id,
+					createdAt: cat.createdAt,
+					upatedAt: cat.updatedAt,
+					name: cat.name,
+					linkName: cat.name,
+					list: [],
+				};
+			});
+			for (let cat of newData) {
+				state.projects.push(cat);
+			}
+			state.error = action.payload;
+		});
+		builder.addCase(fetchCatsToGantt.rejected, (state, action) => {
+			state.loading = false;
+			state.projects = [];
+			state.error = action.payload;
+		});
 	},
 });
 
