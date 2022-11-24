@@ -51,11 +51,11 @@ export const ganttDataSlice = createSlice({
 	initialState,
 	reducers: {
 		addTaskIntoGanttData: (state, action) => {
-			const result = state.some(
+			const result = state.projects.some(
 				(project) => project.name === action.payload.project
 			);
 			!!result
-				? state.forEach((project) => {
+				? state.projects.forEach((project) => {
 						if (project.name === action.payload.project) {
 							project.list.push(action.payload);
 						}
@@ -64,26 +64,26 @@ export const ganttDataSlice = createSlice({
 		},
 		editTaskNameInGanttData: (state, action) => {
 			const newTask = action.payload;
-			const taskInWhichProject = state.find(
+			const taskInWhichProject = state.projects.find(
 				(projectHere) => projectHere.name === newTask.project
 			);
-			const projectIndex = state.indexOf(taskInWhichProject);
-			state[projectIndex].list.forEach((task) => {
+			const projectIndex = state.projects.indexOf(taskInWhichProject);
+			state.projects[projectIndex].list.forEach((task) => {
 				if (task.id === newTask.id) {
 					task.name = newTask.name;
 				}
 			});
 		},
 		deleteTaskFromGanttData: (state, action) => {
-			const taskInWhichProject = state.find(
+			const taskInWhichProject = state.projects.find(
 				(project) => project.name === action.payload.project
 			);
-			const projectIndex = state.indexOf(taskInWhichProject);
-			const task = state[projectIndex].list.find(
+			const projectIndex = state.projects.indexOf(taskInWhichProject);
+			const task = state.projects[projectIndex].list.find(
 				(task) => task.id === action.payload.id
 			);
-			const taskIndex = state[projectIndex].list.indexOf(task);
-			state[projectIndex].list.splice(taskIndex, 1);
+			const taskIndex = state.projects[projectIndex].list.indexOf(task);
+			state.projects[projectIndex].list.splice(taskIndex, 1);
 		},
 		addProjectIntoGanttData: (state, action) => {
 			const result = state.projects.some(

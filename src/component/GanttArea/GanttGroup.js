@@ -11,6 +11,7 @@ import {
 export const GanttGroup = ({ project }) => {
 	const dispatch = useDispatch();
 	const timeView = useSelector((state) => state.timeView);
+	const isListOpen = useSelector((state) => state.listOpen);
 
 	let columnWidth = 65;
 	if (timeView.view === ViewMode.Year) {
@@ -48,6 +49,7 @@ export const GanttGroup = ({ project }) => {
 					onDelete={deleteTaskHandler}
 					onDoubleClick={editTaskHandler}
 					viewMode={timeView.view}
+					listCellWidth={isListOpen.status ? '155px' : ''}
 					columnWidth={columnWidth}
 				/>
 			) : (

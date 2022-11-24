@@ -8,6 +8,9 @@ import {
 	Stack,
 	TextField,
 	Button,
+	FormControlLabel,
+	Switch,
+	FormGroup,
 } from '@mui/material';
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
@@ -17,9 +20,12 @@ import { addTaskIntoGanttData } from '../../store/ganttDataSlice';
 import { changeView } from '../../store/timeViewSlice';
 
 import { useState } from 'react';
+import { closeList, openList } from '../../store/listOpenSlice';
 
 const InputArea = () => {
 	const categories = useSelector((state) => state.projectCategories);
+	const [isListOpen, setIsListOpen] = useState(true);
+	console.log('isListOpen', isListOpen);
 	const dispatch = useDispatch();
 	const [taskData, setTaskData] = useState({
 		id: null,
@@ -81,6 +87,17 @@ const InputArea = () => {
 		);
 	};
 
+	const listOpenHandler = (e) => {
+		const isChecked = e.target.checked;
+		if (!isChecked) {
+			dispatch(closeList());
+			setIsListOpen(isChecked);
+		} else {
+			dispatch(openList());
+			setIsListOpen(isChecked);
+		}
+	};
+
 	return (
 		<Box sx={{ width: '100%', display: 'flex', flexWrap: 'wrap' }}>
 			<Box
@@ -123,10 +140,10 @@ const InputArea = () => {
 								label='Project Name'
 								onChange={projectNameHandler}
 								value={taskData.project}>
-								{categories.cats.map((projects) => {
+								{categories.cats.map((project) => {
 									return (
-										<MenuItem value={projects.name} key={projects.name}>
-											{projects.projectName}
+										<MenuItem value={project.name} key={project.name}>
+											{project.name}
 										</MenuItem>
 									);
 								})}
@@ -231,6 +248,22 @@ const InputArea = () => {
 						</MenuItem>
 					</Select>
 				</FormControl>
+				<FormGroup>
+					<FormControlLabel
+						control={
+							<Switch
+								checked={isListOpen}
+								onChange={listOpenHandler}
+								sx={{
+									'& .MuiSwitch-switchBase.Mui-checked+.MuiSwitch-track': {
+										backgroundColor: (theme) => theme.palette.other.btn,
+									},
+								}}
+							/>
+						}
+						label='開啟 Gantt 側欄'
+					/>
+				</FormGroup>
 			</Box>
 		</Box>
 	);
