@@ -16,13 +16,13 @@
     "s3Key": {
       "Type": "String"
     },
-    "storageprojectCatsDBName": {
+    "storageganttChartAppDbName": {
       "Type": "String",
-      "Default": "storageprojectCatsDBName"
+      "Default": "storageganttChartAppDbName"
     },
-    "storageprojectCatsDBArn": {
+    "storageganttChartAppDbArn": {
       "Type": "String",
-      "Default": "storageprojectCatsDBArn"
+      "Default": "storageganttChartAppDbArn"
     }
   },
   "Conditions": {
@@ -97,12 +97,12 @@
         "RoleName": {
           "Fn::If": [
             "ShouldNotCreateEnvResources",
-            "ganttchartappLambdaRole6ae4b836",
+            "ganttchartappLambdaRole57a3d6b2",
             {
               "Fn::Join": [
                 "",
                 [
-                  "ganttchartappLambdaRole6ae4b836",
+                  "ganttchartappLambdaRole57a3d6b2",
                   "-",
                   {
                     "Ref": "env"
@@ -182,14 +182,14 @@
               ],
               "Resource": [
                 {
-                  "Ref": "storageprojectCatsDBArn"
+                  "Ref": "storageganttChartAppDbArn"
                 },
                 {
                   "Fn::Join": [
                     "/",
                     [
                       {
-                        "Ref": "storageprojectCatsDBArn"
+                        "Ref": "storageganttChartAppDbArn"
                       },
                       "index/*"
                     ]

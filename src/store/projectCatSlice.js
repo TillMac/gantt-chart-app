@@ -8,7 +8,7 @@ const initialState = {
 };
 
 export const fetchCats = createAsyncThunk('projectCategories/fetchCats', () => {
-	return API.get('projectCats', '/projectcats/userId');
+	return API.get('projectCatsApi', '/projectcats/userId');
 });
 
 export const projectCatSlice = createSlice({

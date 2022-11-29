@@ -30,7 +30,7 @@
     }
   },
   "storage": {
-    "projectCatsDB": {
+    "ganttChartAppDb": {
       "service": "DynamoDB",
       "providerPlugin": "awscloudformation"
     }
@@ -43,7 +43,7 @@
       "dependsOn": [
         {
           "category": "storage",
-          "resourceName": "projectCatsDB",
+          "resourceName": "ganttChartAppDb",
           "attributes": [
             "Name",
             "Arn"
@@ -57,7 +57,7 @@
     }
   },
   "api": {
-    "projectCats": {
+    "projectCatsApi": {
       "service": "API Gateway",
       "providerPlugin": "awscloudformation",
       "dependsOn": [
