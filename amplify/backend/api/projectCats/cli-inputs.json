@@ -1,0 +1,18 @@
+{
+  "version": 1,
+  "paths": {
+    "/projectcats": {
+      "name": "/projectcats",
+      "lambdaFunction": "projectCatsFunc",
+      "permissions": {
+        "setting": "private",
+        "auth": [
+          "create",
+          "read",
+          "update",
+          "delete"
+        ]
+      }
+    }
+  }
+}
