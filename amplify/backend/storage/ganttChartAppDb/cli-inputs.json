@@ -1,12 +1,12 @@
 {
-  "resourceName": "projectCatsDB",
-  "tableName": "projectCatsDB",
+  "resourceName": "ganttChartAppDb",
+  "tableName": "projectCats",
   "partitionKey": {
     "fieldName": "userId",
     "fieldType": "string"
   },
   "sortKey": {
-    "fieldName": "createdAt",
+    "fieldName": "id",
     "fieldType": "string"
   },
   "gsi": [],

@@ -15,7 +15,7 @@ AWS.config.update({ region: process.env.TABLE_REGION });
 
 const dynamodb = new AWS.DynamoDB.DocumentClient();
 
-let tableName = 'projectCatsDB';
+let tableName = 'projectCats';
 if (process.env.ENV && process.env.ENV !== 'NONE') {
 	tableName = tableName + '-' + process.env.ENV;
 }
@@ -23,7 +23,7 @@ if (process.env.ENV && process.env.ENV !== 'NONE') {
 const userIdPresent = true; // TODO: update in case is required to use that definition
 const partitionKeyName = 'userId';
 const partitionKeyType = 'S';
-const sortKeyName = 'createdAt';
+const sortKeyName = 'id';
 const sortKeyType = 'S';
 const hasSortKey = sortKeyName !== '';
 const path = '/projectcats';
@@ -154,27 +154,12 @@ app.put(path, function (req, res) {
 		req.body['userId'] =
 			req.apiGateway.event.requestContext.identity.cognitoIdentityId || UNAUTH;
 	}
+
 	let putItemParams = {
 		TableName: tableName,
 		Item: req.body,
 	};
-	// let putItemParams = {
-	// 	TableName: tableName,
-	// 	Key: {
-	// 		id: req.body.id,
-	// 	},
-	// 	UpdateExpression: 'SET #name = :n, #updatedAt = :u',
-	// 	ExpressionAttributeNames: {
-	// 		'#name': 'name',
-	// 		'#updatedAt': 'updatedAt',
-	// 	},
-	// 	ExpressionAttributeValues: {
-	// 		':n': req.body.name,
-	// 		':u': req.body.updatedAt,
-	// 	},
-	// 	ReturnValues: 'UPDATED_NEW',
-	// };
-	dynamodb.update(putItemParams, (err, data) => {
+	dynamodb.put(putItemParams, (err, data) => {
 		if (err) {
 			res.statusCode = 500;
 			res.json({ error: err, url: req.url, body: req.body });
@@ -212,8 +197,11 @@ app.post(path, function (req, res) {
  * HTTP remove method to delete object *
  ***************************************/
 
-app.delete(path + '/object' + hashKeyPath + sortKeyPath, function (req, res) {
-	const params = {};
+// app.delete(path + '/object' + hashKeyPath + sortKeyPath, function (req, res) {
+app.delete(path + hashKeyPath + '/:id', function (req, res) {
+	const params = {
+		id: req.params.id,
+	};
 	if (userIdPresent && req.apiGateway) {
 		params[partitionKeyName] =
 			req.apiGateway.event.requestContext.identity.cognitoIdentityId || UNAUTH;
@@ -244,6 +232,7 @@ app.delete(path + '/object' + hashKeyPath + sortKeyPath, function (req, res) {
 	let removeItemParams = {
 		TableName: tableName,
 		Key: params,
+		// Key: req.params.id,
 	};
 	dynamodb.delete(removeItemParams, (err, data) => {
 		if (err) {

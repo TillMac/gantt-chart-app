@@ -48,7 +48,7 @@ const CreateForm = ({ clickCreate, setClickCreate }) => {
 
 	const createProjectHandler = (e) => {
 		e.preventDefault();
-		API.post('projectCats', '/projectcats/', {
+		API.post('projectCatsApi', '/projectcats/', {
 			body: {
 				name: catData.name,
 				createdAt: catData.createdAt,

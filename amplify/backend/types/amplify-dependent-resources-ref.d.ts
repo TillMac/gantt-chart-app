@@ -13,7 +13,7 @@ export type AmplifyDependentResourcesAttributes = {
         }
     },
     "storage": {
-        "projectCatsDB": {
+        "ganttChartAppDb": {
             "Name": "string",
             "Arn": "string",
             "StreamArn": "string",
@@ -33,7 +33,7 @@ export type AmplifyDependentResourcesAttributes = {
         }
     },
     "api": {
-        "projectCats": {
+        "projectCatsApi": {
             "RootUrl": "string",
             "ApiName": "string",
             "ApiId": "string"
