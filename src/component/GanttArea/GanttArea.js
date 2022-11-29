@@ -7,7 +7,7 @@ import { GanttGroup } from './GanttGroup';
 const GanttArea = () => {
 	const params = useParams();
 	const ganttData = useSelector((state) => state.ganttDataRedux);
-	const testGantt = ganttData.map((project) => {
+	const testGantt = ganttData.projects.map((project) => {
 		return {
 			...project,
 			list: project.list.map((task) => {
@@ -21,9 +21,9 @@ const GanttArea = () => {
 
 	return (
 		<Box sx={{ width: '100%' }}>
-			{!!testGantt.some((project) => project.name === params.name) ? (
+			{!!testGantt.some((project) => project.linkName === params.name) ? (
 				testGantt
-					.filter((project) => project.name === params.name)
+					.filter((project) => project.linkName === params.name)
 					.map((project) => {
 						return (
 							<div key={project.id}>

@@ -16,21 +16,37 @@ import {
 	ListItemIcon,
 	ListItemText,
 } from '@mui/material';
-import { useState } from 'react';
-import { useSelector } from 'react-redux';
-import { Link, useNavigate } from 'react-router-dom';
+import { useEffect, useRef, useState } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { NavLink, useNavigate } from 'react-router-dom';
 import DeleteButton from './ChangeList/DeleteButton';
 import { EditButton } from './ChangeList/EditButton';
 import CreateListItem from './CreateListItem/CreateListItem';
 import { useAuthenticator } from '@aws-amplify/ui-react';
+import { fetchCats } from '../../store/projectCatSlice';
+import { fetchCatsToGantt } from '../../store/ganttDataSlice';
+import { Auth } from 'aws-amplify';
 
 const drawerWidth = 240;
 
 const Sidebar = () => {
 	const [clickCreate, setClickCreate] = useState(false);
+	const dispatch = useDispatch();
 	const projects = useSelector((state) => state.projectCategories);
 	const { signOut } = useAuthenticator((context) => [context.signOut]);
+	const { user } = useAuthenticator((context) => [context.user]);
+	const { attributes } = Auth.currentAuthenticatedUser();
 	const navigate = useNavigate();
+	const isDataFetchedRef = useRef(false);
+	console.log(user, 'user');
+	console.log(attributes, 'attributes');
+
+	useEffect(() => {
+		if (isDataFetchedRef.current) return;
+		dispatch(fetchCats());
+		dispatch(fetchCatsToGantt());
+		isDataFetchedRef.current = true;
+	}, []);
 
 	const logOutHandler = () => {
 		signOut();
@@ -70,49 +86,68 @@ const Sidebar = () => {
 					/>
 					<p style={{ fontSize: '24px', marginLeft: '20px' }}>Jennifer</p>
 				</Container>
-				<Link to={'/'} style={{ textDecoration: 'none', color: 'inherit' }}>
-					<List>
-						<ListItem>
-							<ListItemButton>
-								<ListItemIcon>
-									<Inbox />
-								</ListItemIcon>
-								<ListItemText primary='總覽' />
-							</ListItemButton>
-						</ListItem>
-					</List>
-				</Link>
-				{projects.length !== 0 ? (
-					<>
-						<List
+				<List>
+					<ListItem>
+						<ListItemButton
+							component={NavLink}
+							to={'/'}
+							end
 							sx={{
-								height: 192,
-								overflowY: 'auto',
+								textDecoration: 'none',
+								color: 'inherit',
+								'&.active': {
+									borderBottom: '#8884FF thick double ',
+								},
 							}}>
-							{projects.map((project) => {
-								return (
-									<ListItem key={project.id}>
-										<Link
-											to={`/projects/${project.name}`}
-											style={{ textDecoration: 'none', color: 'inherit' }}>
-											<ListItemButton>
-												<ListItemIcon>
-													<Folder />
-												</ListItemIcon>
-												<ListItemText primary={project.projectName} />
-											</ListItemButton>
-										</Link>
-										<EditButton project={project} />
-										<DeleteButton project={project} />
-									</ListItem>
-								);
-							})}
-						</List>
-						<Divider />
+							<ListItemIcon>
+								<Inbox />
+							</ListItemIcon>
+							<ListItemText primary='總覽' sx={{ ml: -1 }} />
+						</ListItemButton>
+					</ListItem>
+				</List>
+				{projects.cats.length !== 0 ? (
+					<>
 						<CreateListItem
 							clickCreate={clickCreate}
 							setClickCreate={setClickCreate}
 						/>
+						<Divider />
+						<List
+							sx={{
+								height: 500,
+								overflowY: 'auto',
+							}}>
+							{projects.cats.map((project) => {
+								return (
+									<ListItem key={project.id}>
+										<ListItemButton
+											component={NavLink}
+											to={`/projects/${project.linkName}`}
+											end
+											sx={{
+												textDecoration: 'none',
+												color: 'inherit',
+												'&.active': {
+													borderBottom: '#8884FF thick double ',
+												},
+											}}>
+											<ListItemIcon>
+												<Folder />
+											</ListItemIcon>
+											<ListItemText
+												primary={project.name}
+												sx={{
+													ml: -1,
+												}}
+											/>
+											<EditButton project={project} />
+											<DeleteButton project={project} />
+										</ListItemButton>
+									</ListItem>
+								);
+							})}
+						</List>
 					</>
 				) : (
 					<>

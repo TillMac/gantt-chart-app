@@ -12,17 +12,18 @@ import { v4 as uuidv4 } from 'uuid';
 import { useDispatch, useSelector } from 'react-redux';
 import { addProjectCat } from '../../../store/projectCatSlice';
 import { addProjectIntoGanttData } from '../../../store/ganttDataSlice';
+import { API } from 'aws-amplify';
 
 const CreateForm = ({ clickCreate, setClickCreate }) => {
 	const cancelCreateHandler = () => setClickCreate(!clickCreate);
 	const [isInputError, setIsInputError] = useState(true);
 	const dispatch = useDispatch();
-	const ganttCatData = useSelector((state) => state.ganttDataRedux);
+	const projectCatsData = useSelector((state) => state.projectCategories);
 
 	const [catData, setCatData] = useState({});
 
 	const inputHandler = (e) => {
-		const result = ganttCatData.some(
+		const result = projectCatsData.cats.some(
 			(projectCat) => projectCat.name === e.target.value.replace(/\s*/g, '')
 		);
 		if (
@@ -34,9 +35,11 @@ const CreateForm = ({ clickCreate, setClickCreate }) => {
 		) {
 			setIsInputError(false);
 			setCatData({
-				projectName: e.target.value.trim(),
-				name: e.target.value.replace(/\s*/g, ''),
+				linkName: e.target.value.replace(/\s*/g, ''),
+				name: e.target.value.trim(),
 				id: uuidv4(),
+				createdAt: new Date().toJSON(),
+				updatedAt: new Date().toJSON(),
 			});
 		} else {
 			setIsInputError(true);
@@ -45,12 +48,22 @@ const CreateForm = ({ clickCreate, setClickCreate }) => {
 
 	const createProjectHandler = (e) => {
 		e.preventDefault();
+		API.post('projectCats', '/projectcats/', {
+			body: {
+				name: catData.name,
+				createdAt: catData.createdAt,
+				updatedAt: catData.updatedAt,
+				id: catData.id,
+			},
+		});
 		dispatch(addProjectCat(catData));
 		dispatch(
 			addProjectIntoGanttData({
-				projectName: catData.projectName,
+				linkName: catData.linkName,
 				name: catData.name,
 				id: catData.id,
+				createdAt: catData.createdAt,
+				updatedAt: catData.updatedAt,
 				list: [],
 			})
 		);

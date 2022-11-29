@@ -1,9 +1,9 @@
 {
   "version": 1,
   "paths": {
-    "/categories": {
-      "name": "/categories",
-      "lambdaFunction": "projectCatsFunction",
+    "/projectcats": {
+      "name": "/projectcats",
+      "lambdaFunction": "projectCatsFunc",
       "permissions": {
         "setting": "private",
         "auth": [

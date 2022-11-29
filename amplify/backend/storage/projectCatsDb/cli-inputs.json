@@ -1,12 +1,12 @@
 {
-  "resourceName": "projectCatsDb",
-  "tableName": "projectCatsDb",
+  "resourceName": "projectCatsDB",
+  "tableName": "projectCatsDB",
   "partitionKey": {
-    "fieldName": "name",
+    "fieldName": "userId",
     "fieldType": "string"
   },
   "sortKey": {
-    "fieldName": "updatedAt",
+    "fieldName": "createdAt",
     "fieldType": "string"
   },
   "gsi": [],
