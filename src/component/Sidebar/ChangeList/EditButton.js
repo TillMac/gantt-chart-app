@@ -1,12 +1,14 @@
 import { EditOutlined } from '@mui/icons-material';
 import { IconButton } from '@mui/material';
+import { API } from 'aws-amplify';
 import React from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { editProjectInGanttData } from '../../../store/ganttDataSlice';
 import { editProjectCat } from '../../../store/projectCatSlice';
 
 export const EditButton = ({ project }) => {
 	const dispatch = useDispatch();
+	const projectCats = useSelector((state) => state.projectCategories);
 	const catEditHandler = (e) => {
 		e.preventDefault();
 		let editedCatName = {};
@@ -16,9 +18,18 @@ export const EditButton = ({ project }) => {
 				name: prompt,
 				linkName: prompt.replace(/\s*/g, ''),
 				id: project.id,
+				updatedAt: new Date().toJSON(),
 			};
 		}
 		console.log('editedCatName', editedCatName);
+		API.put('projectCats', '/projectcats/', {
+			body: {
+				name: editedCatName.name,
+				updatedAt: editedCatName.updatedAt,
+				id: projectCats.id,
+				createdAt: projectCats.createdAt,
+			},
+		});
 		dispatch(editProjectCat(editedCatName));
 		dispatch(editProjectInGanttData(editedCatName));
 	};

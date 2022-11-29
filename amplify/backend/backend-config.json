@@ -30,20 +30,20 @@
     }
   },
   "storage": {
-    "projectCatsDb": {
+    "projectCatsDB": {
       "service": "DynamoDB",
       "providerPlugin": "awscloudformation"
     }
   },
   "function": {
-    "projectCatsFunction": {
+    "projectCatsFunc": {
       "build": true,
       "providerPlugin": "awscloudformation",
       "service": "Lambda",
       "dependsOn": [
         {
           "category": "storage",
-          "resourceName": "projectCatsDb",
+          "resourceName": "projectCatsDB",
           "attributes": [
             "Name",
             "Arn"
@@ -57,13 +57,13 @@
     }
   },
   "api": {
-    "projectCatsApi": {
+    "projectCats": {
       "service": "API Gateway",
       "providerPlugin": "awscloudformation",
       "dependsOn": [
         {
           "category": "function",
-          "resourceName": "projectCatsFunction",
+          "resourceName": "projectCatsFunc",
           "attributes": [
             "Name",
             "Arn"

@@ -8,7 +8,7 @@ const initialState = {
 };
 
 export const fetchCats = createAsyncThunk('projectCategories/fetchCats', () => {
-	return API.get('projectCatsApi', '/projectcats/name');
+	return API.get('projectCats', '/projectcats/userId');
 });
 
 export const projectCatSlice = createSlice({
@@ -33,8 +33,10 @@ export const projectCatSlice = createSlice({
 				(project) => project.id === editedProject.id
 			);
 			const projectIndex = state.cats.indexOf(project);
+			console.log(projectIndex, 'projectIndex from edit');
 			state.cats[projectIndex].name = editedProject.name;
 			state.cats[projectIndex].linkName = editedProject.linkName;
+			state.cats[projectIndex].updatedAt = editedProject.updatedAt;
 		},
 	},
 	extraReducers: (builder) => {
@@ -43,6 +45,7 @@ export const projectCatSlice = createSlice({
 		});
 		builder.addCase(fetchCats.fulfilled, (state, action) => {
 			state.loading = false;
+			console.log(action.payload, 'action.payment');
 			const fetchedProjectCats = action.payload;
 			const newData = fetchedProjectCats.map((cat) => {
 				return {

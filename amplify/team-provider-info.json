@@ -17,16 +17,16 @@
         "ganttchartappbe507b04": {}
       },
       "function": {
-        "projectCatsFunction": {
+        "projectCatsFunc": {
           "deploymentBucketName": "amplify-ganttchartapp-dev-154534-deployment",
-          "s3Key": "amplify-builds/projectCatsFunction-4359525276366436585a-build.zip"
+          "s3Key": "amplify-builds/projectCatsFunc-7061506f67376f4f4162-build.zip"
         }
       },
       "storage": {
-        "projectCatsDb": {}
+        "projectCatsDB": {}
       },
       "api": {
-        "projectCatsApi": {}
+        "projectCats": {}
       }
     }
   }

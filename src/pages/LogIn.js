@@ -3,6 +3,7 @@ import { Authenticator, useAuthenticator } from '@aws-amplify/ui-react';
 import '@aws-amplify/ui-react/styles.css';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { API } from 'aws-amplify';
 
 const logoImg = require('../assets/logo.png');
 const pplImg = require('../assets/people.png');
@@ -16,6 +17,10 @@ const LogIn = () => {
 		if (route !== 'authenticated') return;
 		navigate(from, { replace: true });
 	}, [route, navigate, from]);
+
+	useEffect(() => {
+		window.nani = API;
+	}, []);
 
 	return (
 		<Box

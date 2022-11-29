@@ -3,7 +3,7 @@
   "paths": {
     "/projectcats": {
       "name": "/projectcats",
-      "lambdaFunction": "projectCatsFunction",
+      "lambdaFunction": "projectCatsFunc",
       "permissions": {
         "setting": "private",
         "auth": [

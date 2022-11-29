@@ -25,6 +25,7 @@ import CreateListItem from './CreateListItem/CreateListItem';
 import { useAuthenticator } from '@aws-amplify/ui-react';
 import { fetchCats } from '../../store/projectCatSlice';
 import { fetchCatsToGantt } from '../../store/ganttDataSlice';
+import { Auth } from 'aws-amplify';
 
 const drawerWidth = 240;
 
@@ -33,8 +34,12 @@ const Sidebar = () => {
 	const dispatch = useDispatch();
 	const projects = useSelector((state) => state.projectCategories);
 	const { signOut } = useAuthenticator((context) => [context.signOut]);
+	const { user } = useAuthenticator((context) => [context.user]);
+	const { attributes } = Auth.currentAuthenticatedUser();
 	const navigate = useNavigate();
 	const isDataFetchedRef = useRef(false);
+	console.log(user, 'user');
+	console.log(attributes, 'attributes');
 
 	useEffect(() => {
 		if (isDataFetchedRef.current) return;
