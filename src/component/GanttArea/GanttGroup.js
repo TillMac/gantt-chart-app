@@ -11,6 +11,7 @@ import {
 export const GanttGroup = ({ project }) => {
 	const dispatch = useDispatch();
 	const timeView = useSelector((state) => state.timeView);
+	const isListOpen = useSelector((state) => state.listOpen);
 
 	let columnWidth = 65;
 	if (timeView.view === ViewMode.Year) {
@@ -41,13 +42,14 @@ export const GanttGroup = ({ project }) => {
 
 	return (
 		<Box key={project.id} sx={{ maxWidth: '90%', ml: 'auto', mr: 'auto' }}>
-			<h3>{project.projectName}</h3>
+			<h3>{project.name}</h3>
 			{project.list.length !== 0 ? (
 				<Gantt
 					tasks={project.list}
 					onDelete={deleteTaskHandler}
 					onDoubleClick={editTaskHandler}
 					viewMode={timeView.view}
+					listCellWidth={isListOpen.status ? '155px' : ''}
 					columnWidth={columnWidth}
 				/>
 			) : (

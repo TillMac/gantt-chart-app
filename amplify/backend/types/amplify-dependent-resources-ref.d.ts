@@ -1,6 +1,6 @@
 export type AmplifyDependentResourcesAttributes = {
     "auth": {
-        "ganttchartappb13bb1cd": {
+        "ganttchartappbe507b04": {
             "IdentityPoolId": "string",
             "IdentityPoolName": "string",
             "HostedUIDomain": "string",
@@ -13,7 +13,7 @@ export type AmplifyDependentResourcesAttributes = {
         }
     },
     "storage": {
-        "projectCatsDb": {
+        "projectCatsDB": {
             "Name": "string",
             "Arn": "string",
             "StreamArn": "string",
@@ -25,7 +25,7 @@ export type AmplifyDependentResourcesAttributes = {
         }
     },
     "function": {
-        "projectCatsFunction": {
+        "projectCatsFunc": {
             "Name": "string",
             "Arn": "string",
             "Region": "string",
@@ -33,7 +33,7 @@ export type AmplifyDependentResourcesAttributes = {
         }
     },
     "api": {
-        "projectCatsApi": {
+        "projectCats": {
             "RootUrl": "string",
             "ApiName": "string",
             "ApiId": "string"

@@ -11,7 +11,7 @@
     "env": {
       "Type": "String"
     },
-    "projectCatsApi": {
+    "projectCats": {
       "Type": "String"
     }
   },
@@ -52,7 +52,7 @@
                       },
                       ":",
                       {
-                        "Ref": "projectCatsApi"
+                        "Ref": "projectCats"
                       },
                       "/",
                       {
@@ -64,7 +64,7 @@
                           }
                         ]
                       },
-                      "/*/categories/*"
+                      "/*/projectcats/*"
                     ]
                   ]
                 },
@@ -82,7 +82,7 @@
                       },
                       ":",
                       {
-                        "Ref": "projectCatsApi"
+                        "Ref": "projectCats"
                       },
                       "/",
                       {
@@ -94,7 +94,7 @@
                           }
                         ]
                       },
-                      "/*/categories"
+                      "/*/projectcats"
                     ]
                   ]
                 }

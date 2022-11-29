@@ -1,6 +1,6 @@
 {
   "AWSTemplateFormatVersion": "2010-09-09",
-  "Description": "{\"createdOn\":\"Mac\",\"createdBy\":\"Amplify\",\"createdWith\":\"10.5.0\",\"stackType\":\"function-Lambda\",\"metadata\":{}}",
+  "Description": "{\"createdOn\":\"Mac\",\"createdBy\":\"Amplify\",\"createdWith\":\"10.5.1\",\"stackType\":\"function-Lambda\",\"metadata\":{}}",
   "Parameters": {
     "CloudWatchRule": {
       "Type": "String",
@@ -16,13 +16,13 @@
     "s3Key": {
       "Type": "String"
     },
-    "storageprojectCatsDbName": {
+    "storageprojectCatsDBName": {
       "Type": "String",
-      "Default": "storageprojectCatsDbName"
+      "Default": "storageprojectCatsDBName"
     },
-    "storageprojectCatsDbArn": {
+    "storageprojectCatsDBArn": {
       "Type": "String",
-      "Default": "storageprojectCatsDbArn"
+      "Default": "storageprojectCatsDBArn"
     }
   },
   "Conditions": {
@@ -55,12 +55,12 @@
         "FunctionName": {
           "Fn::If": [
             "ShouldNotCreateEnvResources",
-            "projectCatsFunction",
+            "projectCatsFunc",
             {
               "Fn::Join": [
                 "",
                 [
-                  "projectCatsFunction",
+                  "projectCatsFunc",
                   "-",
                   {
                     "Ref": "env"
@@ -97,12 +97,12 @@
         "RoleName": {
           "Fn::If": [
             "ShouldNotCreateEnvResources",
-            "ganttchartappLambdaRole3e57d221",
+            "ganttchartappLambdaRole6ae4b836",
             {
               "Fn::Join": [
                 "",
                 [
-                  "ganttchartappLambdaRole3e57d221",
+                  "ganttchartappLambdaRole6ae4b836",
                   "-",
                   {
                     "Ref": "env"
@@ -182,14 +182,14 @@
               ],
               "Resource": [
                 {
-                  "Ref": "storageprojectCatsDbArn"
+                  "Ref": "storageprojectCatsDBArn"
                 },
                 {
                   "Fn::Join": [
                     "/",
                     [
                       {
-                        "Ref": "storageprojectCatsDbArn"
+                        "Ref": "storageprojectCatsDBArn"
                       },
                       "index/*"
                     ]
