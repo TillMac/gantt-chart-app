@@ -22,14 +22,15 @@ export const EditButton = ({ project }) => {
 			};
 		}
 		console.log('editedCatName', editedCatName);
-		API.put('projectCats', '/projectcats/', {
+		API.put('projectCatsApi', `/projectcats/userId/${project.id}`, {
+			response: true,
 			body: {
 				name: editedCatName.name,
 				updatedAt: editedCatName.updatedAt,
 				id: projectCats.id,
 				createdAt: projectCats.createdAt,
 			},
-		});
+		}).then((res) => console.log(res));
 		dispatch(editProjectCat(editedCatName));
 		dispatch(editProjectInGanttData(editedCatName));
 	};

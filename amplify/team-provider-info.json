@@ -19,7 +19,7 @@
       "function": {
         "projectCatsFunc": {
           "deploymentBucketName": "amplify-ganttchartapp-dev-154534-deployment",
-          "s3Key": "amplify-builds/projectCatsFunc-783838436a436f423474-build.zip"
+          "s3Key": "amplify-builds/projectCatsFunc-4856507933714f432b43-build.zip"
         }
       },
       "storage": {
