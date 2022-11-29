@@ -149,17 +149,82 @@ app.get(path + '/object' + hashKeyPath + sortKeyPath, function (req, res) {
  * HTTP put method for insert object *
  *************************************/
 
-app.put(path, function (req, res) {
-	if (userIdPresent) {
-		req.body['userId'] =
+// app.put(path + '/:id', function (req, res) {
+// 	if (userIdPresent) {
+// 		req.body['userId'] =
+// 			req.apiGateway.event.requestContext.identity.cognitoIdentityId || UNAUTH;
+// 	}
+
+// 	let putItemParams = {
+// 		TableName: tableName,
+// 		Item: req.body,
+// 	};
+// 	dynamodb.put(putItemParams, (err, data) => {
+// 		if (err) {
+// 			res.statusCode = 500;
+// 			res.json({ error: err, url: req.url, body: req.body });
+// 		} else {
+// 			res.json({ success: 'put call succeed!', url: req.url, data: data });
+// 		}
+// 	});
+// });
+app.put(path + hashKeyPath + '/:id', function (req, res) {
+	const params = {
+		id: req.params.id,
+		// UpdateExpression: 'SET #name = :n, #updatedAt = :u',
+		// ExpressionAttributeNames: {
+		// 	'#name': 'name',
+		// 	'#updatedAt': 'updatedAt',
+		// },
+		// ExpressionAttributeValues: {
+		// 	':n': req.body.name,
+		// 	':u': req.body.updatedAt,
+		// },
+		// ReturnValues: 'UPDATED_NEW',
+	};
+	if (userIdPresent && req.apiGateway) {
+		params[partitionKeyName] =
 			req.apiGateway.event.requestContext.identity.cognitoIdentityId || UNAUTH;
+	} else {
+		params[partitionKeyName] = req.params[partitionKeyName];
+		try {
+			params[partitionKeyName] = convertUrlType(
+				req.params[partitionKeyName],
+				partitionKeyType
+			);
+		} catch (err) {
+			res.statusCode = 500;
+			res.json({ error: 'Wrong column type ' + err });
+		}
+	}
+	if (hasSortKey) {
+		try {
+			params[sortKeyName] = convertUrlType(
+				req.params[sortKeyName],
+				sortKeyType
+			);
+		} catch (err) {
+			res.statusCode = 500;
+			res.json({ error: 'Wrong column type ' + err });
+		}
 	}
 
 	let putItemParams = {
 		TableName: tableName,
-		Item: req.body,
+		Key: params,
+		// Item: req.body,
+		UpdateExpression: 'SET #name = :n, #updatedAt = :u',
+		ExpressionAttributeNames: {
+			'#name': 'name',
+			'#updatedAt': 'updatedAt',
+		},
+		ExpressionAttributeValues: {
+			':n': req.body.name,
+			':u': req.body.updatedAt,
+		},
+		ReturnValues: 'UPDATED_NEW',
 	};
-	dynamodb.put(putItemParams, (err, data) => {
+	dynamodb.update(putItemParams, (err, data) => {
 		if (err) {
 			res.statusCode = 500;
 			res.json({ error: err, url: req.url, body: req.body });
