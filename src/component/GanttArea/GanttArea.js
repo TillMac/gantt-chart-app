@@ -12,8 +12,14 @@ const GanttArea = () => {
 			...project,
 			list: project.list.map((task) => {
 				return {
-					...task,
-					description: 'copy from state',
+					start: new Date(task.start),
+					end: new Date(task.end),
+					id: task.id,
+					name: task.name,
+					project: task.project,
+					projectId: task.projectId,
+					progress: task.progress,
+					type: task.type,
 				};
 			}),
 		};

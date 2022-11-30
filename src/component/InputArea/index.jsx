@@ -21,6 +21,7 @@ import { changeView } from '../../store/timeViewSlice';
 
 import { useState } from 'react';
 import { closeList, openList } from '../../store/listOpenSlice';
+import { API } from 'aws-amplify';
 
 const InputArea = () => {
 	const categories = useSelector((state) => state.projectCategories);
@@ -31,6 +32,7 @@ const InputArea = () => {
 		id: null,
 		name: '',
 		project: '',
+		projectId: '',
 		type: '',
 		start: null,
 		end: null,
@@ -48,9 +50,13 @@ const InputArea = () => {
 	};
 
 	const projectNameHandler = (e) => {
+		const projectId = categories.cats.find(
+			(project) => project.name === e.target.value
+		).id;
 		setTaskData({
 			...taskData,
 			project: e.target.value,
+			projectId: projectId,
 		});
 	};
 
@@ -64,11 +70,23 @@ const InputArea = () => {
 	const submitHandler = (e) => {
 		e.preventDefault();
 		if (isDateNotValid === false) {
+			API.post('ganttTasksApi', '/gantttasks/', {
+				body: {
+					name: taskData.name,
+					id: taskData.id,
+					projectId: taskData.projectId,
+					start: taskData.start.toJSON(),
+					end: taskData.end.toJSON(),
+					progress: Number(taskData.progress),
+					type: taskData.type,
+				},
+			});
 			dispatch(addTaskIntoGanttData(taskData));
 			setTaskData({
 				id: null,
 				name: '',
 				project: '',
+				projectId: '',
 				type: '',
 				start: null,
 				end: null,

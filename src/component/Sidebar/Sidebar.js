@@ -24,7 +24,10 @@ import { EditButton } from './ChangeList/EditButton';
 import CreateListItem from './CreateListItem/CreateListItem';
 import { useAuthenticator } from '@aws-amplify/ui-react';
 import { fetchCats } from '../../store/projectCatSlice';
-import { fetchCatsToGantt } from '../../store/ganttDataSlice';
+import {
+	fetchCatsToGantt,
+	fetchTasksToGantt,
+} from '../../store/ganttDataSlice';
 import { Auth } from 'aws-amplify';
 
 const drawerWidth = 240;
@@ -44,7 +47,7 @@ const Sidebar = () => {
 	useEffect(() => {
 		if (isDataFetchedRef.current) return;
 		dispatch(fetchCats());
-		dispatch(fetchCatsToGantt());
+		dispatch(fetchCatsToGantt()).then(dispatch(fetchTasksToGantt()));
 		isDataFetchedRef.current = true;
 	}, []);
 
