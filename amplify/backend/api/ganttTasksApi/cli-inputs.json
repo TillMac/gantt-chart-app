@@ -1,0 +1,18 @@
+{
+  "version": 1,
+  "paths": {
+    "/gantttasks": {
+      "name": "/gantttasks",
+      "lambdaFunction": "ganttTasksFunc",
+      "permissions": {
+        "setting": "private",
+        "auth": [
+          "create",
+          "read",
+          "update",
+          "delete"
+        ]
+      }
+    }
+  }
+}

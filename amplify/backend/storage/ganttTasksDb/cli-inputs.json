@@ -1,0 +1,14 @@
+{
+  "resourceName": "ganttTasksDb",
+  "tableName": "ganttTasksDb",
+  "partitionKey": {
+    "fieldName": "userId",
+    "fieldType": "string"
+  },
+  "sortKey": {
+    "fieldName": "id",
+    "fieldType": "string"
+  },
+  "gsi": [],
+  "triggerFunctions": []
+}
