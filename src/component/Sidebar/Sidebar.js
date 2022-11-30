@@ -46,8 +46,12 @@ const Sidebar = () => {
 
 	useEffect(() => {
 		if (isDataFetchedRef.current) return;
-		dispatch(fetchCats());
-		dispatch(fetchCatsToGantt()).then(dispatch(fetchTasksToGantt()));
+		const fetchData = async () => {
+			dispatch(fetchCats());
+			dispatch(fetchCatsToGantt());
+			await dispatch(fetchTasksToGantt());
+		};
+		fetchData();
 		isDataFetchedRef.current = true;
 	}, []);
 
