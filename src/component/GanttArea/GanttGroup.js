@@ -34,6 +34,7 @@ export const GanttGroup = ({ project }) => {
 			editedTask = {
 				name: prompt,
 				project: task.project,
+				projectId: task.projectId,
 				id: task.id,
 			};
 		}

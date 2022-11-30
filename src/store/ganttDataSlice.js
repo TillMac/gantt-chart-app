@@ -42,7 +42,14 @@ const initialState = {
 export const fetchCatsToGantt = createAsyncThunk(
 	'ganttDataRedux/fetchCatsToGantt',
 	() => {
-		return API.get('projectCatsApi', '/projectcats/name');
+		return API.get('projectCatsApi', '/projectcats/userId');
+	}
+);
+
+export const fetchTasksToGantt = createAsyncThunk(
+	'ganttDataRedux/fetchTasksToGant',
+	() => {
+		return API.get('ganttTasksApi', '/gantttasks/userId');
 	}
 );
 
@@ -52,11 +59,12 @@ export const ganttDataSlice = createSlice({
 	reducers: {
 		addTaskIntoGanttData: (state, action) => {
 			const result = state.projects.some(
-				(project) => project.name === action.payload.project
+				(project) => project.id === action.payload.projectId
 			);
 			!!result
 				? state.projects.forEach((project) => {
-						if (project.name === action.payload.project) {
+						if (project.id === action.payload.projectId) {
+							action.payload.project = action.payload.projectId;
 							project.list.push(action.payload);
 						}
 				  })
@@ -65,18 +73,16 @@ export const ganttDataSlice = createSlice({
 		editTaskNameInGanttData: (state, action) => {
 			const newTask = action.payload;
 			const taskInWhichProject = state.projects.find(
-				(projectHere) => projectHere.name === newTask.project
+				(projectHere) => projectHere.id === newTask.projectId
 			);
-			const projectIndex = state.projects.indexOf(taskInWhichProject);
-			state.projects[projectIndex].list.forEach((task) => {
-				if (task.id === newTask.id) {
-					task.name = newTask.name;
-				}
-			});
+			const task = taskInWhichProject.list.find(
+				(task) => task.id === newTask.id
+			);
+			task.name = newTask.name;
 		},
 		deleteTaskFromGanttData: (state, action) => {
 			const taskInWhichProject = state.projects.find(
-				(project) => project.name === action.payload.project
+				(project) => project.id === action.payload.projectId
 			);
 			const projectIndex = state.projects.indexOf(taskInWhichProject);
 			const task = state.projects[projectIndex].list.find(
@@ -87,7 +93,7 @@ export const ganttDataSlice = createSlice({
 		},
 		addProjectIntoGanttData: (state, action) => {
 			const result = state.projects.some(
-				(project) => project.name === action.payload.name
+				(project) => project.id === action.payload.id
 			);
 			!result
 				? state.projects.push(action.payload)
@@ -132,7 +138,7 @@ export const ganttDataSlice = createSlice({
 					createdAt: cat.createdAt,
 					upatedAt: cat.updatedAt,
 					name: cat.name,
-					linkName: cat.name,
+					linkName: cat.name.replace(/\s*/g, ''),
 					list: [],
 				};
 			});
@@ -145,6 +151,18 @@ export const ganttDataSlice = createSlice({
 			state.loading = false;
 			state.projects = [];
 			state.error = action.payload;
+		});
+		builder.addCase(fetchTasksToGantt.fulfilled, (state, action) => {
+			state.loading = false;
+			const fetchedGanttTasks = action.payload;
+			state.projects.forEach((project) => {
+				fetchedGanttTasks.forEach((task) => {
+					if (project.id === task.projectId) {
+						task.project = task.projectId;
+						project.list.push(task);
+					}
+				});
+			});
 		});
 	},
 });
