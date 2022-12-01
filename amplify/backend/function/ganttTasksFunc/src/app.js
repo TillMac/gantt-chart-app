@@ -153,10 +153,6 @@ app.put(path + hashKeyPath + '/:id', function (req, res) {
 	const params = {
 		id: req.params.id,
 	};
-	// if (userIdPresent) {
-	// 	req.body['userId'] =
-	// 		req.apiGateway.event.requestContext.identity.cognitoIdentityId || UNAUTH;
-	// }
 
 	if (userIdPresent && req.apiGateway) {
 		params[partitionKeyName] =
@@ -191,7 +187,6 @@ app.put(path + hashKeyPath + '/:id', function (req, res) {
 	let putItemParams = {
 		TableName: tableName,
 		Key: params,
-		// Item: req.body,
 		UpdateExpression: 'SET #name = :n, #updatedAt = :u',
 		ExpressionAttributeNames: {
 			'#name': 'name',
@@ -208,7 +203,7 @@ app.put(path + hashKeyPath + '/:id', function (req, res) {
 	// 	TableName: tableName,
 	// 	Item: req.body,
 	// };
-	dynamodb.put(putItemParams, (err, data) => {
+	dynamodb.update(putItemParams, (err, data) => {
 		if (err) {
 			res.statusCode = 500;
 			res.json({ error: err, url: req.url, body: req.body });

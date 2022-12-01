@@ -44,6 +44,11 @@ export const GanttGroup = ({ project }) => {
 				id: task.id,
 			};
 		}
+		API.put('ganttTasksApi', `/gantttasks/userId/${task.id}`, {
+			body: {
+				name: editedTask.name,
+			},
+		});
 		dispatch(editTaskNameInGanttData(editedTask));
 	};
 
