@@ -23,7 +23,7 @@
         },
         "ganttTasksFunc": {
           "deploymentBucketName": "amplify-ganttchartapp-dev-154534-deployment",
-          "s3Key": "amplify-builds/ganttTasksFunc-5773664c50644f303556-build.zip"
+          "s3Key": "amplify-builds/ganttTasksFunc-64735178635a5857526a-build.zip"
         }
       },
       "storage": {

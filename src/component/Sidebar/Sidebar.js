@@ -48,7 +48,7 @@ const Sidebar = () => {
 		if (isDataFetchedRef.current) return;
 		const fetchData = async () => {
 			dispatch(fetchCats());
-			dispatch(fetchCatsToGantt());
+			await dispatch(fetchCatsToGantt());
 			await dispatch(fetchTasksToGantt());
 		};
 		fetchData();

@@ -7,6 +7,7 @@ import {
 	deleteTaskFromGanttData,
 	editTaskNameInGanttData,
 } from '../../store/ganttDataSlice';
+import { API } from 'aws-amplify';
 
 export const GanttGroup = ({ project }) => {
 	const dispatch = useDispatch();
@@ -23,8 +24,13 @@ export const GanttGroup = ({ project }) => {
 	}
 
 	const deleteTaskHandler = (task) => {
+		console.log(task, 'task');
 		const conf = window.confirm(`Are you sure about delete ${task.name} ?`);
-		!!conf && dispatch(deleteTaskFromGanttData(task));
+		!!conf &&
+			API.del('ganttTasksApi', `/gantttasks/userId/${task.id}`, {
+				response: true,
+			}).then((response) => console.log(response, 'from del API')) &&
+			dispatch(deleteTaskFromGanttData(task));
 	};
 
 	const editTaskHandler = (task) => {
