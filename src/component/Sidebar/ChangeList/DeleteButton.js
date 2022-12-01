@@ -12,9 +12,9 @@ export default function DeleteButton({ project }) {
 	const catDeleteHandler = (e) => {
 		console.log('try to delete so hard...');
 		e.preventDefault();
-		// API.del('projectCatsApi', `/projectcats/userId/${project.id}`, {
-		// 	response: true,
-		// }).then((response) => console.log(response, 'from del cat API'));
+		API.del('projectCatsApi', `/projectcats/userId/${project.id}`, {
+			response: true,
+		}).then((response) => console.log(response, 'from del cat API'));
 		const delProjectData = ganttTasksData.projects.filter(
 			(thisProject) => thisProject.id === project.id
 		);
