@@ -15,6 +15,7 @@ import {
 	ListItemButton,
 	ListItemIcon,
 	ListItemText,
+	Skeleton,
 } from '@mui/material';
 import { useEffect, useRef, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
@@ -76,6 +77,7 @@ const Sidebar = () => {
 				sx={{
 					width: '100%',
 					height: '100vh',
+					overflowX: 'hidden',
 					background: (theme) => theme.palette.secondary.main,
 				}}>
 				<Container
@@ -113,7 +115,7 @@ const Sidebar = () => {
 						</ListItemButton>
 					</ListItem>
 				</List>
-				{projects.cats.length !== 0 ? (
+				{!projects.loading ? (
 					<>
 						<CreateListItem
 							clickCreate={clickCreate}
@@ -122,7 +124,7 @@ const Sidebar = () => {
 						<Divider />
 						<List
 							sx={{
-								height: 500,
+								height: 320,
 								overflowY: 'auto',
 							}}>
 							{projects.cats.map((project) => {
@@ -158,11 +160,32 @@ const Sidebar = () => {
 					</>
 				) : (
 					<>
-						<Divider />
 						<CreateListItem
 							clickCreate={clickCreate}
 							setClickCreate={setClickCreate}
 						/>
+						<Divider />
+						<Container
+							sx={{
+								mt: 2,
+								ml: '16px',
+								display: 'flex',
+								alignItems: 'center',
+								padding: '0 !important',
+							}}>
+							<Skeleton
+								variant='circular'
+								width={40}
+								height={40}
+								sx={{ display: 'inline-block' }}
+							/>
+							<Skeleton
+								variant='rounded'
+								width={150}
+								height={48}
+								sx={{ display: 'inline-block', ml: '16px' }}
+							/>
+						</Container>
 					</>
 				)}
 				<IconButton

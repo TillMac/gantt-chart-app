@@ -34,9 +34,18 @@ import { API } from 'aws-amplify';
 // ];
 
 const initialState = {
-	loading: false,
+	loadingStatus: {
+		cats: false,
+		tasks: true,
+	},
 	projects: [],
-	error: '',
+	error: {
+		status: {
+			cats: false,
+			tasks: false,
+		},
+		msg: '',
+	},
 };
 
 export const fetchCatsToGantt = createAsyncThunk(
@@ -127,10 +136,10 @@ export const ganttDataSlice = createSlice({
 	},
 	extraReducers: (builder) => {
 		builder.addCase(fetchCatsToGantt.pending, (state) => {
-			state.loading = true;
+			state.loadingStatus.cats = true;
 		});
 		builder.addCase(fetchCatsToGantt.fulfilled, (state, action) => {
-			state.loading = false;
+			state.loadingStatus.cats = false;
 			const fetchedProjectCats = action.payload;
 			const newData = fetchedProjectCats.map((cat) => {
 				return {
@@ -145,15 +154,19 @@ export const ganttDataSlice = createSlice({
 			for (let cat of newData) {
 				state.projects.push(cat);
 			}
-			state.error = action.payload;
+			state.error.msg = '';
 		});
 		builder.addCase(fetchCatsToGantt.rejected, (state, action) => {
-			state.loading = false;
+			state.loadingStatus.cats = false;
 			state.projects = [];
-			state.error = action.payload;
+			state.error.status.cats = true;
+			state.error.msg = action.payload;
+		});
+		builder.addCase(fetchTasksToGantt.pending, (state) => {
+			state.loadingStatus.tasks = true;
 		});
 		builder.addCase(fetchTasksToGantt.fulfilled, (state, action) => {
-			state.loading = false;
+			state.loadingStatus.tasks = false;
 			const fetchedGanttTasks = action.payload;
 			state.projects.forEach((project) => {
 				fetchedGanttTasks.forEach((task) => {
@@ -163,6 +176,11 @@ export const ganttDataSlice = createSlice({
 					}
 				});
 			});
+		});
+		builder.addCase(fetchTasksToGantt.rejected, (state, action) => {
+			state.loadingStatus.tasks = false;
+			state.error.status.tasks = true;
+			state.error.msg = action.payload;
 		});
 	},
 });
