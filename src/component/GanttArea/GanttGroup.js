@@ -1,4 +1,4 @@
-import { Box } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 import { Gantt, ViewMode } from 'gantt-task-react';
 import React from 'react';
 import 'gantt-task-react/dist/index.css';
@@ -53,8 +53,12 @@ export const GanttGroup = ({ project }) => {
 	};
 
 	return (
-		<Box key={project.id} sx={{ maxWidth: '90%', ml: 'auto', mr: 'auto' }}>
-			<h3>{project.name}</h3>
+		<Box
+			key={project.id}
+			sx={{ maxWidth: '90%', ml: 'auto', mr: 'auto', mt: 1.5 }}>
+			<Typography variant='h3' sx={{ fontSize: '32px' }}>
+				{project.name}
+			</Typography>
 			{project.list.length !== 0 ? (
 				<Gantt
 					tasks={project.list}

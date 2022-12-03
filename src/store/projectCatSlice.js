@@ -4,7 +4,10 @@ import { API } from 'aws-amplify';
 const initialState = {
 	loading: false,
 	cats: [],
-	error: '',
+	error: {
+		status: false,
+		msg: '',
+	},
 };
 
 export const fetchCats = createAsyncThunk('projectCategories/fetchCats', () => {
@@ -65,7 +68,8 @@ export const projectCatSlice = createSlice({
 		builder.addCase(fetchCats.rejected, (state, action) => {
 			state.loading = false;
 			state.cats = [];
-			state.error = action.payload;
+			state.error.status = true;
+			state.error.msg = action.payload;
 		});
 	},
 });

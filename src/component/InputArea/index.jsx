@@ -117,7 +117,13 @@ const InputArea = () => {
 	};
 
 	return (
-		<Box sx={{ width: '100%', display: 'flex', flexWrap: 'wrap' }}>
+		<Box
+			sx={{
+				width: '100%',
+				display: 'flex',
+				flexWrap: 'wrap',
+				height: '40vh',
+			}}>
 			<Box
 				sx={{
 					width: '90%',
@@ -266,7 +272,11 @@ const InputArea = () => {
 						</MenuItem>
 					</Select>
 				</FormControl>
-				<FormGroup>
+				<FormGroup
+					sx={{
+						mt: 'auto',
+						mb: 'auto',
+					}}>
 					<FormControlLabel
 						control={
 							<Switch
