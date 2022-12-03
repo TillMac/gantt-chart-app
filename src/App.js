@@ -1,4 +1,4 @@
-import './App.css';
+// import './App.css';
 import { Box, ThemeProvider } from '@mui/material';
 import Sidebar from './component/Sidebar/Sidebar';
 import InputArea from './component/InputArea';
