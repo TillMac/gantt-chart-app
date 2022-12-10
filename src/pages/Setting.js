@@ -15,7 +15,7 @@ const Setting = () => {
 	const dispatch = useDispatch();
 
 	return (
-		<Box sx={{ width: '60%', height: '100vh', ml: 'auto', mr: 'auto' }}>
+		<Box sx={{ width: '40%', height: '100vh', ml: 'auto', mr: 'auto' }}>
 			<Box sx={{ width: '100%' }}>
 				<Typography
 					variant='h3'
