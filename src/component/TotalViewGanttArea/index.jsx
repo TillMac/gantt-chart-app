@@ -1,7 +1,8 @@
-import { Box, Divider, Skeleton, Typography } from '@mui/material';
+import { Box, Divider, Skeleton } from '@mui/material';
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { GanttGroup } from '../GanttArea/GanttGroup';
+import InputArea from '../InputArea';
 
 const TotalViewGanttArea = () => {
 	const ganttData = useSelector((state) => state.ganttDataRedux);
@@ -28,45 +29,52 @@ const TotalViewGanttArea = () => {
 		};
 	});
 	return (
-		<Box sx={{ width: '100%' }}>
-			{!ganttData.loadingStatus.tasks ? (
-				allGanttData.length !== 0 ? (
-					allGanttData.map((project) => {
-						return (
-							<div key={project.id}>
-								<GanttGroup project={project} />
-								<Divider />
-							</div>
-						);
-					})
+		<>
+			<InputArea />
+			<Box sx={{ width: '100%' }}>
+				{!ganttData.loadingStatus.tasks ? (
+					allGanttData.length !== 0 ? (
+						allGanttData.map((project) => {
+							return (
+								<div key={project.id}>
+									<GanttGroup project={project} />
+									<Divider />
+								</div>
+							);
+						})
+					) : (
+						<Box
+							sx={{
+								display: 'flex',
+								width: '100%',
+								textAlign: 'center',
+								alignItems: 'center',
+								justifyContent: 'center',
+								height: '60vh',
+								color: (theme) => theme.palette.other.text,
+							}}>
+							<p style={{ width: '100%', fontSize: '24px', fontWeight: '400' }}>
+								There's no data here, please create a new project!
+							</p>
+						</Box>
+					)
 				) : (
-					<Box
-						sx={{
-							display: 'flex',
-							width: '100%',
-							textAlign: 'center',
-							alignItems: 'center',
-							justifyContent: 'center',
-							height: '60vh',
-							color: (theme) => theme.palette.other.text,
-						}}>
-						<p style={{ width: '100%', fontSize: '24px', fontWeight: '400' }}>
-							There's no data here, please create a new project!
-						</p>
+					<Box sx={{ maxWidth: '90%', ml: 'auto', mr: 'auto', mt: 1.5 }}>
+						<Skeleton
+							varient='rounded'
+							width={'20%'}
+							sx={{ fontSize: '36px' }}
+						/>
+						<Skeleton
+							varient='rounded'
+							width={'100%'}
+							height={150}
+							sx={{ mt: -2 }}
+						/>
 					</Box>
-				)
-			) : (
-				<Box sx={{ maxWidth: '90%', ml: 'auto', mr: 'auto', mt: 1.5 }}>
-					<Skeleton varient='rounded' width={'20%'} sx={{ fontSize: '36px' }} />
-					<Skeleton
-						varient='rounded'
-						width={'100%'}
-						height={150}
-						sx={{ mt: -2 }}
-					/>
-				</Box>
-			)}
-		</Box>
+				)}
+			</Box>
+		</>
 	);
 };
 

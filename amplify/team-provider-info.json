@@ -28,16 +28,22 @@
         "ganttDataToGoogleCalendarFunc": {
           "deploymentBucketName": "amplify-ganttchartapp-dev-154534-deployment",
           "s3Key": "amplify-builds/ganttDataToGoogleCalendarFunc-2b597965674f4947344a-build.zip"
+        },
+        "usersFunc": {
+          "deploymentBucketName": "amplify-ganttchartapp-dev-154534-deployment",
+          "s3Key": "amplify-builds/usersFunc-665937763048536a5054-build.zip"
         }
       },
       "storage": {
         "ganttChartAppDb": {},
-        "ganttTasksDb": {}
+        "ganttTasksDb": {},
+        "usersDb": {}
       },
       "api": {
         "projectCatsApi": {},
         "ganttTasksApi": {},
-        "ganttDataToGoogleCalendarApi": {}
+        "ganttDataToGoogleCalendarApi": {},
+        "usersApi": {}
       }
     }
   }
