@@ -3,6 +3,7 @@ import {
 	Folder,
 	Inbox,
 	LogoutOutlined,
+	SettingsOutlined,
 } from '@mui/icons-material';
 import {
 	Box,
@@ -19,7 +20,7 @@ import {
 } from '@mui/material';
 import { useEffect, useRef, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { NavLink, useNavigate } from 'react-router-dom';
+import { Link, NavLink, useNavigate } from 'react-router-dom';
 import DeleteButton from './ChangeList/DeleteButton';
 import { EditButton } from './ChangeList/EditButton';
 import CreateListItem from './CreateListItem/CreateListItem';
@@ -29,7 +30,7 @@ import {
 	fetchCatsToGantt,
 	fetchTasksToGantt,
 } from '../../store/ganttDataSlice';
-import { Auth } from 'aws-amplify';
+import { API } from 'aws-amplify';
 
 const drawerWidth = 240;
 
@@ -37,13 +38,30 @@ const Sidebar = () => {
 	const [clickCreate, setClickCreate] = useState(false);
 	const dispatch = useDispatch();
 	const projects = useSelector((state) => state.projectCategories);
+	const userData = useSelector((state) => state.userData);
 	const { signOut } = useAuthenticator((context) => [context.signOut]);
 	const { user } = useAuthenticator((context) => [context.user]);
-	const { attributes } = Auth.currentAuthenticatedUser();
 	const navigate = useNavigate();
 	const isDataFetchedRef = useRef(false);
 	console.log(user, 'user');
-	console.log(attributes, 'attributes');
+
+	// const access_token = user.attributes.name;
+	// const id_token = user.attributes.zoneinfo;
+	// const scope = user.attributes['custom:scope'];
+	// const token_type = 'Bearer';
+
+	// const calendarTestData = {
+	// 	summary: 'Gantt Chart',
+	// 	description: 'Gantt Chart',
+	// };
+
+	// const event = {
+	// 	summary: 'Google I/O 2022',
+	// 	location: '800 Howard St., San Francisco, CA 94103',
+	// 	description: "A chance to hear more about Google's developer products.",
+	// 	startDateTime: '2022-12-10T09:00:00-07:00',
+	// 	endDateTime: '2022-12-10T17:00:00-07:00',
+	// };
 
 	useEffect(() => {
 		if (isDataFetchedRef.current) return;
@@ -53,6 +71,16 @@ const Sidebar = () => {
 			await dispatch(fetchTasksToGantt());
 		};
 		fetchData();
+		// API.post(
+		// 	'ganttDataToGoogleCalendarApi',
+		// 	'/ganttdatatogooglecalendar/create-calendar',
+		// 	{
+		// 		body: {
+		// 			access_token,
+		// 			event,
+		// 		},
+		// 	}
+		// );
 		isDataFetchedRef.current = true;
 	}, []);
 
@@ -90,10 +118,53 @@ const Sidebar = () => {
 						pr: '0px !important',
 						boxSizing: 'border-box',
 					}}>
-					<AccountCircle
-						sx={{ fontSize: '48px', mt: 'auto', mb: 'auto', ml: 4.5 }}
-					/>
-					<p style={{ fontSize: '24px', marginLeft: '20px' }}>Jennifer</p>
+					{!!userData.isLoading || userData.userData.length === 0 ? (
+						<>
+							<Skeleton
+								variant='circular'
+								width={40}
+								height={40}
+								sx={{ display: 'inline-block' }}
+							/>
+							<Skeleton
+								variant='rounded'
+								width={150}
+								height={48}
+								sx={{ display: 'inline-block', ml: '16px' }}
+							/>
+						</>
+					) : (
+						<>
+							{userData.userData[0].photoLink !== null ? (
+								<img
+									src={userData.userData[0].photoLink}
+									style={{
+										width: '40px',
+										borderRadius: '50%',
+										marginTop: 'auto',
+										marginBottom: 'auto',
+										marginLeft: '36px',
+									}}
+									alt='user icon'
+								/>
+							) : (
+								<AccountCircle
+									sx={{ fontSize: '48px', mt: 'auto', mb: 'auto', ml: 4.5 }}
+								/>
+							)}
+							<p
+								style={{
+									fontSize: '24px',
+									marginLeft: '20px',
+									overflow: 'hidden',
+									maxHeight: '36px',
+									maxWidth: '96px',
+									textOverflow: 'ellipsis',
+								}}>
+								{userData.userData[0].username}
+							</p>
+						</>
+					)}
 				</Container>
 				<List>
 					<ListItem>
@@ -188,12 +259,23 @@ const Sidebar = () => {
 						</Container>
 					</>
 				)}
-				<IconButton
-					size='large'
-					sx={{ position: 'absolute', bottom: 10, right: 10 }}
-					onClick={logOutHandler}>
-					<LogoutOutlined />
-				</IconButton>
+				<Box
+					sx={{
+						position: 'absolute',
+						bottom: 10,
+						right: 10,
+						display: 'flex',
+						width: '100%',
+						flexDirection: 'row-reverse',
+						alignItems: 'center',
+					}}>
+					<IconButton size='large' onClick={logOutHandler}>
+						<LogoutOutlined />
+					</IconButton>
+					<IconButton size='large' component={Link} to={'setting'}>
+						<SettingsOutlined />
+					</IconButton>
+				</Box>
 			</Box>
 		</Drawer>
 	);
