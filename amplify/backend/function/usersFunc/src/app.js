@@ -149,17 +149,43 @@ app.get(path + '/object' + hashKeyPath + sortKeyPath, function (req, res) {
  * HTTP put method for insert object *
  *************************************/
 
-app.put(path, function (req, res) {
-	if (userIdPresent) {
-		req.body['userId'] =
+app.put(path + hashKeyPath, function (req, res) {
+	const params = {};
+	if (userIdPresent && req.apiGateway) {
+		params[partitionKeyName] =
 			req.apiGateway.event.requestContext.identity.cognitoIdentityId || UNAUTH;
+	} else {
+		params[partitionKeyName] = req.params[partitionKeyName];
+		try {
+			params[partitionKeyName] = convertUrlType(
+				req.params[partitionKeyName],
+				partitionKeyType
+			);
+		} catch (err) {
+			res.statusCode = 500;
+			res.json({ error: 'Wrong column type ' + err });
+		}
 	}
+	// if (userIdPresent) {
+	// 	req.body['userId'] =
+	// 		req.apiGateway.event.requestContext.identity.cognitoIdentityId || UNAUTH;
+	// }
 
 	let putItemParams = {
 		TableName: tableName,
-		Item: req.body,
+		Key: params,
+		UpdateExpression: 'SET #username = :n, #updatedAt = :u',
+		ExpressionAttributeNames: {
+			'#username': 'username',
+			'#updatedAt': 'updatedAt',
+		},
+		ExpressionAttributeValues: {
+			':n': req.body.username,
+			':u': new Date().toJSON(),
+		},
+		ReturnValues: 'UPDATED_NEW',
 	};
-	dynamodb.put(putItemParams, (err, data) => {
+	dynamodb.update(putItemParams, (err, data) => {
 		if (err) {
 			res.statusCode = 500;
 			res.json({ error: err, url: req.url, body: req.body });
