@@ -30,7 +30,6 @@ import {
 	fetchCatsToGantt,
 	fetchTasksToGantt,
 } from '../../store/ganttDataSlice';
-import { API } from 'aws-amplify';
 
 const drawerWidth = 240;
 
@@ -45,23 +44,7 @@ const Sidebar = () => {
 	const isDataFetchedRef = useRef(false);
 	console.log(user, 'user');
 
-	// const access_token = user.attributes.name;
-	// const id_token = user.attributes.zoneinfo;
-	// const scope = user.attributes['custom:scope'];
-	// const token_type = 'Bearer';
-
-	// const calendarTestData = {
-	// 	summary: 'Gantt Chart',
-	// 	description: 'Gantt Chart',
-	// };
-
-	// const event = {
-	// 	summary: 'Google I/O 2022',
-	// 	location: '800 Howard St., San Francisco, CA 94103',
-	// 	description: "A chance to hear more about Google's developer products.",
-	// 	startDateTime: '2022-12-10T09:00:00-07:00',
-	// 	endDateTime: '2022-12-10T17:00:00-07:00',
-	// };
+	const accessToken = user.attributes.name;
 
 	useEffect(() => {
 		if (isDataFetchedRef.current) return;
@@ -71,16 +54,16 @@ const Sidebar = () => {
 			await dispatch(fetchTasksToGantt());
 		};
 		fetchData();
-		// API.post(
-		// 	'ganttDataToGoogleCalendarApi',
-		// 	'/ganttdatatogooglecalendar/create-calendar',
-		// 	{
-		// 		body: {
-		// 			access_token,
-		// 			event,
-		// 		},
-		// 	}
-		// );
+		// fetch('https://www.googleapis.com/calendar/v3/calendars', {
+		// 	method: 'POST',
+		// 	headers: {
+		// 		'Content-Type': 'application/json',
+		// 		Authorization: `Bearer ${accessToken}`,
+		// 	},
+		// 	body: JSON.stringify({
+		// 		summary: 'work_GC_2',
+		// 	}),
+		// });
 		isDataFetchedRef.current = true;
 	}, []);
 

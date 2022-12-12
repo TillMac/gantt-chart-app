@@ -82,12 +82,6 @@
         }
       ]
     },
-    "ganttDataToGoogleCalendarFunc": {
-      "build": true,
-      "providerPlugin": "awscloudformation",
-      "service": "Lambda",
-      "dependsOn": []
-    },
     "usersFunc": {
       "build": true,
       "providerPlugin": "awscloudformation",
@@ -130,20 +124,6 @@
         {
           "category": "function",
           "resourceName": "ganttTasksFunc",
-          "attributes": [
-            "Name",
-            "Arn"
-          ]
-        }
-      ]
-    },
-    "ganttDataToGoogleCalendarApi": {
-      "service": "API Gateway",
-      "providerPlugin": "awscloudformation",
-      "dependsOn": [
-        {
-          "category": "function",
-          "resourceName": "ganttDataToGoogleCalendarFunc",
           "attributes": [
             "Name",
             "Arn"
