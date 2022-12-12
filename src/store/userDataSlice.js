@@ -8,6 +8,7 @@ const initialState = {
 		status: false,
 		msg: '',
 	},
+	isFetched: false,
 };
 
 export const fetchUserData = createAsyncThunk('userData/fetchUserData', () => {
@@ -28,9 +29,11 @@ export const userDataSlice = createSlice({
 			state.userData[0].username = newUsername;
 			state.userData[0].updatedAt = updatedTime;
 		},
-		updateUserPhoto: (state, action) => {
+		updateUserPhotoAndEmail: (state, action) => {
 			const newPhoto = action.payload.photoLink;
-			state.userData[0].photo = newPhoto;
+			const newEmail = action.payload.email;
+			state.userData[0].photoLink = newPhoto;
+			state.userData[0].email = newEmail;
 		},
 	},
 	extraReducers: (builder) => {
@@ -39,7 +42,9 @@ export const userDataSlice = createSlice({
 		});
 		builder.addCase(fetchUserData.fulfilled, (state, action) => {
 			state.isLoading = false;
-			const fetchedUserData = action.payload;
+			state.isFetched = true;
+			const fetchedUserData = action.payload[0];
+			fetchedUserData.photoLink = null;
 			state.userData.push(fetchedUserData);
 		});
 		builder.addCase(fetchUserData.rejected, (state, action) => {
@@ -50,7 +55,7 @@ export const userDataSlice = createSlice({
 	},
 });
 
-export const { updateUserName, addUserData, updateUserPhoto } =
+export const { updateUserName, addUserData, updateUserPhotoAndEmail } =
 	userDataSlice.actions;
 
 export default userDataSlice.reducer;

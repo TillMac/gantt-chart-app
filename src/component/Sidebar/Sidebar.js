@@ -30,6 +30,12 @@ import {
 	fetchCatsToGantt,
 	fetchTasksToGantt,
 } from '../../store/ganttDataSlice';
+import {
+	addUserData,
+	fetchUserData,
+	updateUserPhotoAndEmail,
+} from '../../store/userDataSlice';
+import { API } from 'aws-amplify';
 
 const drawerWidth = 240;
 
@@ -38,32 +44,62 @@ const Sidebar = () => {
 	const dispatch = useDispatch();
 	const projects = useSelector((state) => state.projectCategories);
 	const userData = useSelector((state) => state.userData);
-	const { signOut } = useAuthenticator((context) => [context.signOut]);
 	const { user } = useAuthenticator((context) => [context.user]);
+	const { signOut } = useAuthenticator((context) => [context.signOut]);
 	const navigate = useNavigate();
 	const isDataFetchedRef = useRef(false);
-	console.log(user, 'user');
-
-	const accessToken = user.attributes.name;
 
 	useEffect(() => {
 		if (isDataFetchedRef.current) return;
 		const fetchData = async () => {
 			dispatch(fetchCats());
+			dispatch(fetchUserData());
 			await dispatch(fetchCatsToGantt());
 			await dispatch(fetchTasksToGantt());
+			const username = user.username;
+			if (userData.userData.length !== 0) {
+				if (username.indexOf('google') === -1) {
+					const newUser = {
+						username,
+						photoLink: null,
+						email: user.attributes.email,
+					};
+					dispatch(addUserData(newUser));
+					API.post('usersApi', '/users', {
+						body: {
+							username: newUser.username,
+						},
+					});
+				} else {
+					const newUser = {
+						username: user.attributes.nickname,
+						photoLink: user.attributes.photo,
+						email: user.attributes.email,
+					};
+					dispatch(addUserData(newUser));
+					API.post('usersApi', '/users', {
+						body: {
+							username: newUser.username,
+						},
+					});
+				}
+			} else {
+				if (username.indexOf('google') === -1) {
+					const newUser = {
+						photoLink: null,
+						email: user.attributes.email,
+					};
+					dispatch(updateUserPhotoAndEmail(newUser));
+				} else {
+					const newUser = {
+						photoLink: user.attributes.photo,
+						email: user.attributes.email,
+					};
+					dispatch(updateUserPhotoAndEmail(newUser));
+				}
+			}
 		};
 		fetchData();
-		// fetch('https://www.googleapis.com/calendar/v3/calendars', {
-		// 	method: 'POST',
-		// 	headers: {
-		// 		'Content-Type': 'application/json',
-		// 		Authorization: `Bearer ${accessToken}`,
-		// 	},
-		// 	body: JSON.stringify({
-		// 		summary: 'work_GC_2',
-		// 	}),
-		// });
 		isDataFetchedRef.current = true;
 	}, []);
 
