@@ -55,12 +55,6 @@ export type AmplifyDependentResourcesAttributes = {
             "Region": "string",
             "LambdaExecutionRole": "string"
         },
-        "ganttDataToGoogleCalendarFunc": {
-            "Name": "string",
-            "Arn": "string",
-            "Region": "string",
-            "LambdaExecutionRole": "string"
-        },
         "usersFunc": {
             "Name": "string",
             "Arn": "string",
@@ -75,11 +69,6 @@ export type AmplifyDependentResourcesAttributes = {
             "ApiId": "string"
         },
         "ganttTasksApi": {
-            "RootUrl": "string",
-            "ApiName": "string",
-            "ApiId": "string"
-        },
-        "ganttDataToGoogleCalendarApi": {
             "RootUrl": "string",
             "ApiName": "string",
             "ApiId": "string"

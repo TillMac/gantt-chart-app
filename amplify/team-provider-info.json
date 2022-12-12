@@ -25,10 +25,6 @@
           "deploymentBucketName": "amplify-ganttchartapp-dev-154534-deployment",
           "s3Key": "amplify-builds/ganttTasksFunc-4b636b65496377617037-build.zip"
         },
-        "ganttDataToGoogleCalendarFunc": {
-          "deploymentBucketName": "amplify-ganttchartapp-dev-154534-deployment",
-          "s3Key": "amplify-builds/ganttDataToGoogleCalendarFunc-2b597965674f4947344a-build.zip"
-        },
         "usersFunc": {
           "deploymentBucketName": "amplify-ganttchartapp-dev-154534-deployment",
           "s3Key": "amplify-builds/usersFunc-665937763048536a5054-build.zip"
@@ -42,7 +38,6 @@
       "api": {
         "projectCatsApi": {},
         "ganttTasksApi": {},
-        "ganttDataToGoogleCalendarApi": {},
         "usersApi": {}
       }
     }

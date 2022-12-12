@@ -24,7 +24,7 @@ function App() {
 		if (isDataFetchedRef.current) return;
 		const fetchData = async () => {
 			await dispatch(fetchUserData);
-			const username = user.username;
+			const username = await user.username;
 			if (userData.length === 0) {
 				if (username.indexOf('google') === -1) {
 					const newUserData = {
