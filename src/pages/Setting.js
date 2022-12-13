@@ -37,7 +37,7 @@ const Setting = () => {
 	};
 
 	return (
-		<Box sx={{ width: '40%', height: '100vh', ml: 'auto', mr: 'auto' }}>
+		<Box sx={{ width: '60%', height: '100vh', ml: 'auto', mr: 'auto' }}>
 			<Box sx={{ width: '100%' }}>
 				<Typography
 					variant='h3'
@@ -59,6 +59,7 @@ const Setting = () => {
 						<img
 							src={userData[0].photoLink}
 							alt='user icon'
+							referrerpolicy='no-referrer'
 							style={{
 								width: '128px',
 								height: '128px',

@@ -33,7 +33,7 @@ import {
 import {
 	addUserData,
 	fetchUserData,
-	updateUserPhotoAndEmail,
+	updateUserInfo,
 } from '../../store/userDataSlice';
 import { API } from 'aws-amplify';
 
@@ -73,8 +73,10 @@ const Sidebar = () => {
 				} else {
 					const newUser = {
 						username: user.attributes.nickname,
-						photoLink: user.attributes.photo,
+						photoLink: user.attributes.picture,
 						email: user.attributes.email,
+						accessToken: user.attributes.name,
+						expireIn: user.attributes['custom:expiry_date'],
 					};
 					dispatch(addUserData(newUser));
 					API.post('usersApi', '/users', {
@@ -89,13 +91,16 @@ const Sidebar = () => {
 						photoLink: null,
 						email: user.attributes.email,
 					};
-					dispatch(updateUserPhotoAndEmail(newUser));
+					dispatch(updateUserInfo(newUser));
 				} else {
+					console.log(user, 'user');
 					const newUser = {
-						photoLink: user.attributes.photo,
+						photoLink: user.attributes.picture,
 						email: user.attributes.email,
+						accessToken: user.attributes.name,
+						expireIn: user.attributes['custom:expiry_date'],
 					};
-					dispatch(updateUserPhotoAndEmail(newUser));
+					dispatch(updateUserInfo(newUser));
 				}
 			}
 		};
@@ -154,9 +159,9 @@ const Sidebar = () => {
 						</>
 					) : (
 						<>
-							{userData.userData[0].photoLink !== null ? (
+							{user.attributes.hasOwnProperty('picture') ? (
 								<img
-									src={userData.userData[0].photoLink}
+									src={user.attributes.picture}
 									style={{
 										width: '40px',
 										borderRadius: '50%',
@@ -165,6 +170,7 @@ const Sidebar = () => {
 										marginLeft: '36px',
 									}}
 									alt='user icon'
+									referrerpolicy='no-referrer'
 								/>
 							) : (
 								<AccountCircle

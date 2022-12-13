@@ -29,11 +29,22 @@ export const userDataSlice = createSlice({
 			state.userData[0].username = newUsername;
 			state.userData[0].updatedAt = updatedTime;
 		},
-		updateUserPhotoAndEmail: (state, action) => {
-			const newPhoto = action.payload.photoLink;
-			const newEmail = action.payload.email;
-			state.userData[0].photoLink = newPhoto;
-			state.userData[0].email = newEmail;
+		updateUserInfo: (state, action) => {
+			const updateInfo = action.payload;
+			if (updateInfo.hasOwnProperty('photoLink')) {
+				state.userData[0].photoLink = updateInfo.photoLink;
+			}
+			if (updateInfo.hasOwnProperty('email')) {
+				state.userData[0].email = updateInfo.email;
+			}
+			if (updateInfo.hasOwnProperty('accessToken')) {
+				state.userData[0].accessToken = updateInfo.accessToken;
+			}
+			if (updateInfo.hasOwnProperty('expireIn')) {
+				const expireIn = Number(updateInfo.expireIn) * 1000;
+				const nowTimeStamp = new Date().getTime();
+				state.userData[0].expiryDate = nowTimeStamp + expireIn;
+			}
 		},
 	},
 	extraReducers: (builder) => {
@@ -55,7 +66,7 @@ export const userDataSlice = createSlice({
 	},
 });
 
-export const { updateUserName, addUserData, updateUserPhotoAndEmail } =
+export const { updateUserName, addUserData, updateUserInfo } =
 	userDataSlice.actions;
 
 export default userDataSlice.reducer;
