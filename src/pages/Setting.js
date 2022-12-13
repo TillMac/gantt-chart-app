@@ -59,7 +59,7 @@ const Setting = () => {
 						<img
 							src={userData[0].photoLink}
 							alt='user icon'
-							referrerpolicy='no-referrer'
+							referrerPolicy='no-referrer'
 							style={{
 								width: '128px',
 								height: '128px',
@@ -160,6 +160,8 @@ const Setting = () => {
 						<FormControlLabel
 							control={
 								<Switch
+									checked={true}
+									disabled
 									sx={{
 										'& .MuiSwitch-switchBase.Mui-checked+.MuiSwitch-track': {
 											backgroundColor: (theme) => theme.palette.other.btn,

@@ -77,11 +77,13 @@ const Sidebar = () => {
 						email: user.attributes.email,
 						accessToken: user.attributes.name,
 						expireIn: user.attributes['custom:expiry_date'],
+						isCalendarApi: false,
 					};
 					dispatch(addUserData(newUser));
 					API.post('usersApi', '/users', {
 						body: {
 							username: newUser.username,
+							isCalendarApi: newUser.isCalendarApi,
 						},
 					});
 				}
@@ -170,7 +172,7 @@ const Sidebar = () => {
 										marginLeft: '36px',
 									}}
 									alt='user icon'
-									referrerpolicy='no-referrer'
+									referrerPolicy='no-referrer'
 								/>
 							) : (
 								<AccountCircle
