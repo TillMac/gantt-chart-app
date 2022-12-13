@@ -26,6 +26,7 @@ import { API } from 'aws-amplify';
 
 const InputArea = () => {
 	const categories = useSelector((state) => state.projectCategories);
+	const userData = useSelector((state) => state.userData.userData);
 	const [isListOpen, setIsListOpen] = useState(true);
 	console.log('isListOpen', isListOpen);
 	const dispatch = useDispatch();
@@ -83,6 +84,41 @@ const InputArea = () => {
 				},
 			});
 			dispatch(addTaskIntoGanttData(taskData));
+			console.log(taskData, 'taskData');
+			console.log(taskData.start.toISOString().split('T')[0]);
+			console.log(taskData.end.toISOString().split('T')[0]);
+			const aDay = 24 * 60 * 60 * 1000;
+			const startDateCalendar = new Date(taskData.start.getTime() + aDay)
+				.toISOString()
+				.split('T')[0];
+			const endDateCalendar = new Date(taskData.end.getTime() + aDay)
+				.toISOString()
+				.split('T')[0];
+			if (userData[0].photoLink !== null) {
+				fetch(
+					'https://www.googleapis.com/calendar/v3/calendars/primary/events',
+					{
+						method: 'POST',
+						headers: {
+							'Content-Type': 'application/json',
+							Authorization: `Bearer ${userData[0].accessToken}`,
+						},
+						body: JSON.stringify({
+							summary: taskData.name,
+							description: `This ${taskData.type} was added by Gantt Chart App automatically.`,
+							start: {
+								date: startDateCalendar,
+							},
+							end: {
+								date: endDateCalendar,
+							},
+							colorId: 4,
+						}),
+					}
+				)
+					.then((response) => response.json())
+					.then((data) => console.log(data));
+			}
 			setTaskData({
 				id: null,
 				name: '',
