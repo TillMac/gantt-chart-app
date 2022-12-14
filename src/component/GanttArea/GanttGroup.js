@@ -11,6 +11,7 @@ import { API } from 'aws-amplify';
 
 export const GanttGroup = ({ project }) => {
 	const dispatch = useDispatch();
+	const userData = useSelector((state) => state.userData.userData);
 	const timeView = useSelector((state) => state.timeView);
 	const isListOpen = useSelector((state) => state.listOpen);
 
@@ -49,6 +50,24 @@ export const GanttGroup = ({ project }) => {
 				name: editedTask.name,
 			},
 		});
+		if (userData[0].photoLink !== null) {
+			fetch(
+				`https://www.googleapis.com/calendar/v3/calendars/primary/events/${editedTask.id.replace(
+					/-/g,
+					''
+				)}`,
+				{
+					method: 'PATCH',
+					headers: {
+						'Content-Type': 'application/json',
+						Authorization: `Bearer ${userData[0].accessToken}`,
+					},
+					body: JSON.stringify({
+						summary: editedTask.name,
+					}),
+				}
+			);
+		}
 		dispatch(editTaskNameInGanttData(editedTask));
 	};
 
