@@ -84,9 +84,6 @@ const InputArea = () => {
 				},
 			});
 			dispatch(addTaskIntoGanttData(taskData));
-			console.log(taskData, 'taskData');
-			console.log(taskData.start.toISOString().split('T')[0]);
-			console.log(taskData.end.toISOString().split('T')[0]);
 			const aDay = 24 * 60 * 60 * 1000;
 			const startDateCalendar = new Date(taskData.start.getTime() + aDay)
 				.toISOString()
@@ -105,6 +102,7 @@ const InputArea = () => {
 						},
 						body: JSON.stringify({
 							summary: taskData.name,
+							id: taskData.id.replace(/-/g, ''),
 							description: `This ${taskData.type} was added by Gantt Chart App automatically.`,
 							start: {
 								date: startDateCalendar,
