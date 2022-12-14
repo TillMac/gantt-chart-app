@@ -14,6 +14,7 @@ import {
 } from '@mui/material';
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+
 import { v4 as uuidv4 } from 'uuid';
 import { useDispatch, useSelector } from 'react-redux';
 import { addTaskIntoGanttData } from '../../store/ganttDataSlice';
@@ -25,6 +26,7 @@ import { API } from 'aws-amplify';
 
 const InputArea = () => {
 	const categories = useSelector((state) => state.projectCategories);
+	const userData = useSelector((state) => state.userData.userData);
 	const [isListOpen, setIsListOpen] = useState(true);
 	console.log('isListOpen', isListOpen);
 	const dispatch = useDispatch();
@@ -82,6 +84,39 @@ const InputArea = () => {
 				},
 			});
 			dispatch(addTaskIntoGanttData(taskData));
+			const aDay = 24 * 60 * 60 * 1000;
+			const startDateCalendar = new Date(taskData.start.getTime() + aDay)
+				.toISOString()
+				.split('T')[0];
+			const endDateCalendar = new Date(taskData.end.getTime() + aDay)
+				.toISOString()
+				.split('T')[0];
+			if (userData[0].photoLink !== null) {
+				fetch(
+					'https://www.googleapis.com/calendar/v3/calendars/primary/events',
+					{
+						method: 'POST',
+						headers: {
+							'Content-Type': 'application/json',
+							Authorization: `Bearer ${userData[0].accessToken}`,
+						},
+						body: JSON.stringify({
+							summary: taskData.name,
+							id: taskData.id.replace(/-/g, ''),
+							description: `This ${taskData.type} was added by Gantt Chart App automatically.`,
+							start: {
+								date: startDateCalendar,
+							},
+							end: {
+								date: endDateCalendar,
+							},
+							colorId: 4,
+						}),
+					}
+				)
+					.then((response) => response.json())
+					.then((data) => console.log(data));
+			}
 			setTaskData({
 				id: null,
 				name: '',

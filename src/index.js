@@ -12,6 +12,7 @@ import LogIn from './pages/LogIn';
 import { Provider } from 'react-redux';
 import { store } from './store/index';
 import { Authenticator } from '@aws-amplify/ui-react';
+import Setting from './pages/Setting';
 
 Amplify.configure(awsExports);
 
@@ -29,6 +30,10 @@ const route = createBrowserRouter([
 			{
 				index: true,
 				element: <TotalViewGanttArea />,
+			},
+			{
+				path: 'setting',
+				element: <Setting />,
 			},
 		],
 	},
