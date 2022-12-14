@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom';
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { GanttGroup } from './GanttGroup';
+import InputArea from '../InputArea/index';
 
 const GanttArea = () => {
 	const params = useParams();
@@ -26,21 +27,24 @@ const GanttArea = () => {
 	});
 
 	return (
-		<Box sx={{ width: '100%' }}>
-			{!!testGantt.some((project) => project.linkName === params.name) ? (
-				testGantt
-					.filter((project) => project.linkName === params.name)
-					.map((project) => {
-						return (
-							<div key={project.id}>
-								<GanttGroup project={project} />
-							</div>
-						);
-					})
-			) : (
-				<p>Wrong site, plz go back... Zzzz</p>
-			)}
-		</Box>
+		<>
+			<InputArea />
+			<Box sx={{ width: '100%' }}>
+				{!!testGantt.some((project) => project.linkName === params.name) ? (
+					testGantt
+						.filter((project) => project.linkName === params.name)
+						.map((project) => {
+							return (
+								<div key={project.id}>
+									<GanttGroup project={project} />
+								</div>
+							);
+						})
+				) : (
+					<p>Wrong site, plz go back... Zzzz</p>
+				)}
+			</Box>
+		</>
 	);
 };
 

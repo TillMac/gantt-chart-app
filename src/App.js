@@ -1,7 +1,6 @@
 // import './App.css';
 import { Box, ThemeProvider } from '@mui/material';
 import Sidebar from './component/Sidebar/Sidebar';
-import InputArea from './component/InputArea';
 import Theme from './Theme';
 import { Outlet } from 'react-router-dom';
 import RequireAuth from './component/Auth';
@@ -19,7 +18,6 @@ function App() {
 					}}>
 					<Sidebar />
 					<Box sx={{ width: '100%', overflowX: 'hidden' }}>
-						<InputArea />
 						<Outlet />
 					</Box>
 				</Box>

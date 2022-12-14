@@ -3,6 +3,7 @@ import {
 	Folder,
 	Inbox,
 	LogoutOutlined,
+	SettingsOutlined,
 } from '@mui/icons-material';
 import {
 	Box,
@@ -19,7 +20,7 @@ import {
 } from '@mui/material';
 import { useEffect, useRef, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { NavLink, useNavigate } from 'react-router-dom';
+import { Link, NavLink, useNavigate } from 'react-router-dom';
 import DeleteButton from './ChangeList/DeleteButton';
 import { EditButton } from './ChangeList/EditButton';
 import CreateListItem from './CreateListItem/CreateListItem';
@@ -29,7 +30,12 @@ import {
 	fetchCatsToGantt,
 	fetchTasksToGantt,
 } from '../../store/ganttDataSlice';
-import { Auth } from 'aws-amplify';
+import {
+	addUserData,
+	fetchUserData,
+	updateUserInfo,
+} from '../../store/userDataSlice';
+import { API } from 'aws-amplify';
 
 const drawerWidth = 240;
 
@@ -37,20 +43,68 @@ const Sidebar = () => {
 	const [clickCreate, setClickCreate] = useState(false);
 	const dispatch = useDispatch();
 	const projects = useSelector((state) => state.projectCategories);
-	const { signOut } = useAuthenticator((context) => [context.signOut]);
+	const userData = useSelector((state) => state.userData);
 	const { user } = useAuthenticator((context) => [context.user]);
-	const { attributes } = Auth.currentAuthenticatedUser();
+	const { signOut } = useAuthenticator((context) => [context.signOut]);
 	const navigate = useNavigate();
 	const isDataFetchedRef = useRef(false);
-	console.log(user, 'user');
-	console.log(attributes, 'attributes');
 
 	useEffect(() => {
 		if (isDataFetchedRef.current) return;
 		const fetchData = async () => {
 			dispatch(fetchCats());
+			dispatch(fetchUserData());
 			await dispatch(fetchCatsToGantt());
 			await dispatch(fetchTasksToGantt());
+			const username = user.username;
+			if (userData.userData.length !== 0) {
+				if (username.indexOf('google') === -1) {
+					const newUser = {
+						username,
+						photoLink: null,
+						email: user.attributes.email,
+					};
+					dispatch(addUserData(newUser));
+					API.post('usersApi', '/users', {
+						body: {
+							username: newUser.username,
+						},
+					});
+				} else {
+					const newUser = {
+						username: user.attributes.nickname,
+						photoLink: user.attributes.picture,
+						email: user.attributes.email,
+						accessToken: user.attributes.name,
+						expireIn: user.attributes['custom:expiry_date'],
+						isCalendarApi: false,
+					};
+					dispatch(addUserData(newUser));
+					API.post('usersApi', '/users', {
+						body: {
+							username: newUser.username,
+							isCalendarApi: newUser.isCalendarApi,
+						},
+					});
+				}
+			} else {
+				if (username.indexOf('google') === -1) {
+					const newUser = {
+						photoLink: null,
+						email: user.attributes.email,
+					};
+					dispatch(updateUserInfo(newUser));
+				} else {
+					console.log(user, 'user');
+					const newUser = {
+						photoLink: user.attributes.picture,
+						email: user.attributes.email,
+						accessToken: user.attributes.name,
+						expireIn: user.attributes['custom:expiry_date'],
+					};
+					dispatch(updateUserInfo(newUser));
+				}
+			}
 		};
 		fetchData();
 		isDataFetchedRef.current = true;
@@ -90,10 +144,54 @@ const Sidebar = () => {
 						pr: '0px !important',
 						boxSizing: 'border-box',
 					}}>
-					<AccountCircle
-						sx={{ fontSize: '48px', mt: 'auto', mb: 'auto', ml: 4.5 }}
-					/>
-					<p style={{ fontSize: '24px', marginLeft: '20px' }}>Jennifer</p>
+					{!!userData.isLoading || userData.userData.length === 0 ? (
+						<>
+							<Skeleton
+								variant='circular'
+								width={40}
+								height={40}
+								sx={{ display: 'inline-block' }}
+							/>
+							<Skeleton
+								variant='rounded'
+								width={150}
+								height={48}
+								sx={{ display: 'inline-block', ml: '16px' }}
+							/>
+						</>
+					) : (
+						<>
+							{user.attributes.hasOwnProperty('picture') ? (
+								<img
+									src={user.attributes.picture}
+									style={{
+										width: '40px',
+										borderRadius: '50%',
+										marginTop: 'auto',
+										marginBottom: 'auto',
+										marginLeft: '36px',
+									}}
+									alt='user icon'
+									referrerPolicy='no-referrer'
+								/>
+							) : (
+								<AccountCircle
+									sx={{ fontSize: '48px', mt: 'auto', mb: 'auto', ml: 4.5 }}
+								/>
+							)}
+							<p
+								style={{
+									fontSize: '24px',
+									marginLeft: '20px',
+									overflow: 'hidden',
+									maxHeight: '36px',
+									maxWidth: '96px',
+									textOverflow: 'ellipsis',
+								}}>
+								{userData.userData[0].username}
+							</p>
+						</>
+					)}
 				</Container>
 				<List>
 					<ListItem>
@@ -188,12 +286,23 @@ const Sidebar = () => {
 						</Container>
 					</>
 				)}
-				<IconButton
-					size='large'
-					sx={{ position: 'absolute', bottom: 10, right: 10 }}
-					onClick={logOutHandler}>
-					<LogoutOutlined />
-				</IconButton>
+				<Box
+					sx={{
+						position: 'absolute',
+						bottom: 10,
+						right: 10,
+						display: 'flex',
+						width: '100%',
+						flexDirection: 'row-reverse',
+						alignItems: 'center',
+					}}>
+					<IconButton size='large' onClick={logOutHandler}>
+						<LogoutOutlined />
+					</IconButton>
+					<IconButton size='large' component={Link} to={'setting'}>
+						<SettingsOutlined />
+					</IconButton>
+				</Box>
 			</Box>
 		</Drawer>
 	);
