@@ -27,11 +27,27 @@ export const GanttGroup = ({ project }) => {
 	const deleteTaskHandler = (task) => {
 		console.log(task, 'task');
 		const conf = window.confirm(`Are you sure about delete ${task.name} ?`);
-		!!conf &&
+		if (!!conf) {
 			API.del('ganttTasksApi', `/gantttasks/userId/${task.id}`, {
 				response: true,
-			}).then((response) => console.log(response, 'from del API')) &&
+			}).then((response) => console.log(response, 'from del API'));
+			if (userData[0].photoLink !== null) {
+				fetch(
+					`https://www.googleapis.com/calendar/v3/calendars/primary/events/${task.id.replace(
+						/-/g,
+						''
+					)}`,
+					{
+						method: 'DELETE',
+						headers: {
+							'Content-Type': 'application/json',
+							Authorization: `Bearer ${userData[0].accessToken}`,
+						},
+					}
+				);
+			}
 			dispatch(deleteTaskFromGanttData(task));
+		}
 	};
 
 	const editTaskHandler = (task) => {
