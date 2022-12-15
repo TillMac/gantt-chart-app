@@ -23,12 +23,16 @@ import { changeView } from '../../store/timeViewSlice';
 import { useState } from 'react';
 import { closeList, openList } from '../../store/listOpenSlice';
 import { API } from 'aws-amplify';
+import {
+	postSuccessed,
+	updatePopUpStatus,
+} from '../../store/popUpBarInfoSlice';
 
 const InputArea = () => {
 	const categories = useSelector((state) => state.projectCategories);
 	const userData = useSelector((state) => state.userData.userData);
+	const popUpBarInfo = useSelector((state) => state.popUpBarInfo);
 	const [isListOpen, setIsListOpen] = useState(true);
-	console.log('isListOpen', isListOpen);
 	const dispatch = useDispatch();
 	const [taskData, setTaskData] = useState({
 		id: null,
@@ -69,10 +73,10 @@ const InputArea = () => {
 		});
 	};
 
-	const submitHandler = (e) => {
+	const submitHandler = async (e) => {
 		e.preventDefault();
 		if (isDateNotValid === false) {
-			API.post('ganttTasksApi', '/gantttasks/', {
+			await API.post('ganttTasksApi', '/gantttasks/', {
 				body: {
 					name: taskData.name,
 					id: taskData.id,
@@ -82,8 +86,16 @@ const InputArea = () => {
 					progress: Number(taskData.progress),
 					type: taskData.type,
 				},
-			});
-			dispatch(addTaskIntoGanttData(taskData));
+			})
+				// .then((response) => console.log(response, 'from create task API'))
+				.catch((error) => {
+					dispatch(
+						updatePopUpStatus({
+							isAwsPost: false,
+							msg: '無法更新至資料庫，請檢查連線。',
+						})
+					);
+				});
 			const aDay = 24 * 60 * 60 * 1000;
 			const startDateCalendar = new Date(taskData.start.getTime() + aDay)
 				.toISOString()
@@ -92,7 +104,7 @@ const InputArea = () => {
 				.toISOString()
 				.split('T')[0];
 			if (userData[0].photoLink !== null) {
-				fetch(
+				await fetch(
 					'https://www.googleapis.com/calendar/v3/calendars/primary/events',
 					{
 						method: 'POST',
@@ -114,9 +126,30 @@ const InputArea = () => {
 						}),
 					}
 				)
-					.then((response) => response.json())
-					.then((data) => console.log(data));
+					.then((response) => {
+						if (response.ok) {
+							return response.json();
+						}
+						throw new Error('Google 認證已過期，請重新登入');
+					})
+					.then((data) => console.log(data))
+					.catch((error) => {
+						dispatch(
+							updatePopUpStatus({
+								isGapiPost: false,
+								msg: 'Google 認證已過期，請重新登入',
+							})
+						);
+					});
 			}
+			await dispatch(addTaskIntoGanttData(taskData));
+			if (
+				popUpBarInfo.connection.isAwsPost &&
+				popUpBarInfo.connection.isGapiPost
+			) {
+				dispatch(postSuccessed(taskData.type));
+			}
+
 			setTaskData({
 				id: null,
 				name: '',
