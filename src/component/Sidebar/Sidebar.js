@@ -49,14 +49,36 @@ const Sidebar = () => {
 	const navigate = useNavigate();
 	const isDataFetchedRef = useRef(false);
 
+	const logOutHandler = () => {
+		signOut();
+		navigate('/login');
+	};
+
 	useEffect(() => {
 		if (isDataFetchedRef.current) return;
 		const fetchData = async () => {
+			const username = user.username;
+			if (username.indexOf('google') !== -1) {
+				let expiryTime = await localStorage.getItem('gapiExpiryTime');
+				const currentDate = new Date().getTime();
+				if (expiryTime === 'null' || expiryTime === null) {
+					let expiredAt = 3500;
+					expiryTime = new Date(currentDate + expiredAt * 1000).getTime();
+					localStorage.setItem('gapiExpiryTime', expiryTime);
+				}
+				if (
+					Number(expiryTime) <= currentDate ||
+					expiryTime === null ||
+					expiryTime === 'null'
+				) {
+					localStorage.setItem('gapiExpiryTime', null);
+					logOutHandler();
+				}
+			}
 			dispatch(fetchCats());
 			dispatch(fetchUserData());
 			await dispatch(fetchCatsToGantt());
 			await dispatch(fetchTasksToGantt());
-			const username = user.username;
 			if (userData.userData.length !== 0) {
 				if (username.indexOf('google') === -1) {
 					const newUser = {
@@ -109,11 +131,6 @@ const Sidebar = () => {
 		fetchData();
 		isDataFetchedRef.current = true;
 	}, []);
-
-	const logOutHandler = () => {
-		signOut();
-		navigate('/login');
-	};
 
 	return (
 		<Drawer
