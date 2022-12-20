@@ -1,7 +1,7 @@
 // import './App.css';
 import { Box, ThemeProvider } from '@mui/material';
 import Sidebar from './component/Sidebar/Sidebar';
-import PopUpBar from './component/Snackbar/PopUpBar';
+import PopUpBar from './component/PopUpBar/PopUpBar';
 import Theme from './Theme';
 import { Outlet } from 'react-router-dom';
 import RequireAuth from './component/Auth';
