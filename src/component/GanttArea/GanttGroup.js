@@ -8,10 +8,16 @@ import {
 	editTaskNameInGanttData,
 } from '../../store/ganttDataSlice';
 import { API } from 'aws-amplify';
+import {
+	deleteSuccessed,
+	putSuccessed,
+	updatePopUpStatus,
+} from '../../store/popUpBarInfoSlice';
 
 export const GanttGroup = ({ project }) => {
 	const dispatch = useDispatch();
 	const userData = useSelector((state) => state.userData.userData);
+	const popUpBarInfo = useSelector((state) => state.popUpBarInfo);
 	const timeView = useSelector((state) => state.timeView);
 	const isListOpen = useSelector((state) => state.listOpen);
 
@@ -28,9 +34,6 @@ export const GanttGroup = ({ project }) => {
 		console.log(task, 'task');
 		const conf = window.confirm(`Are you sure about delete ${task.name} ?`);
 		if (!!conf) {
-			API.del('ganttTasksApi', `/gantttasks/userId/${task.id}`, {
-				response: true,
-			}).then((response) => console.log(response, 'from del API'));
 			if (userData[0].photoLink !== null) {
 				fetch(
 					`https://www.googleapis.com/calendar/v3/calendars/primary/events/${task.id.replace(
@@ -44,9 +47,78 @@ export const GanttGroup = ({ project }) => {
 							Authorization: `Bearer ${userData[0].accessToken}`,
 						},
 					}
-				);
+				)
+					.then((response) => {
+						if (response.ok) {
+							return response.json();
+						}
+						throw new Error('Google 認證已過期，請重新登入');
+					})
+					.then((data) => {
+						console.log(data);
+						API.del('ganttTasksApi', `/gantttasks/userId/${task.id}`, {
+							response: true,
+						})
+							.then((response) => {
+								console.log(response, 'from del API');
+								dispatch(deleteTaskFromGanttData(task));
+								if (
+									!!popUpBarInfo.connection.isAwsDel &&
+									!!popUpBarInfo.connection.isGapiDel
+								) {
+									dispatch(
+										deleteSuccessed({
+											type: task.type,
+											name: task.name,
+										})
+									);
+								}
+							})
+							.catch((error) => {
+								dispatch(
+									updatePopUpStatus({
+										isAwsDel: false,
+										msg: '無法更新至資料庫，請檢查連線。',
+									})
+								);
+							});
+					})
+					.catch((error) => {
+						dispatch(
+							updatePopUpStatus({
+								isGapiDel: false,
+								msg: 'Google 認證已過期，請重新登入',
+							})
+						);
+					});
+			} else {
+				API.del('ganttTasksApi', `/gantttasks/userId/${task.id}`, {
+					response: true,
+				})
+					.then((response) => {
+						console.log(response, 'from del API');
+						dispatch(deleteTaskFromGanttData(task));
+						if (
+							!!popUpBarInfo.connection.isAwsDel &&
+							!!popUpBarInfo.connection.isGapiDel
+						) {
+							dispatch(
+								deleteSuccessed({
+									type: task.type,
+									name: task.name,
+								})
+							);
+						}
+					})
+					.catch((error) => {
+						dispatch(
+							updatePopUpStatus({
+								isAwsDel: false,
+								msg: '無法更新至資料庫，請檢查連線。',
+							})
+						);
+					});
 			}
-			dispatch(deleteTaskFromGanttData(task));
 		}
 	};
 
@@ -61,11 +133,6 @@ export const GanttGroup = ({ project }) => {
 				id: task.id,
 			};
 		}
-		API.put('ganttTasksApi', `/gantttasks/userId/${task.id}`, {
-			body: {
-				name: editedTask.name,
-			},
-		});
 		if (userData[0].photoLink !== null) {
 			fetch(
 				`https://www.googleapis.com/calendar/v3/calendars/primary/events/${editedTask.id.replace(
@@ -82,9 +149,81 @@ export const GanttGroup = ({ project }) => {
 						summary: editedTask.name,
 					}),
 				}
-			);
+			)
+				.then((response) => {
+					if (response.ok) {
+						return response.json();
+					}
+					throw new Error('Google 認證已過期，請重新登入');
+				})
+				.then(() => {
+					API.put('ganttTasksApi', `/gantttasks/userId/${task.id}`, {
+						body: {
+							name: editedTask.name,
+						},
+					})
+						.then(() => {
+							dispatch(editTaskNameInGanttData(editedTask));
+							if (
+								!!popUpBarInfo.connection.isAwsPut &&
+								!!popUpBarInfo.connection.isGapiPatch
+							) {
+								dispatch(
+									putSuccessed({
+										newName: editedTask.name,
+										oldName: task.name,
+										type: task.type,
+									})
+								);
+							}
+						})
+						.catch((error) => {
+							dispatch(
+								updatePopUpStatus({
+									isAwsPut: false,
+									msg: '無法更新至資料庫，請檢查連線。',
+								})
+							);
+						});
+				})
+				.catch(() => {
+					dispatch(
+						updatePopUpStatus({
+							isGapiPatch: false,
+							msg: 'Google 認證已過期，請重新登入',
+						})
+					);
+				});
+		} else {
+			API.put('ganttTasksApi', `/gantttasks/userId/${task.id}`, {
+				body: {
+					name: editedTask.name,
+				},
+			})
+				.then(() => {
+					dispatch(editTaskNameInGanttData(editedTask));
+					if (
+						!!popUpBarInfo.connection.isAwsPut &&
+						!!popUpBarInfo.connection.isGapiPatch
+					) {
+						dispatch(
+							putSuccessed({
+								newName: editedTask.name,
+								oldName: task.name,
+								type: task.type,
+							})
+						);
+					}
+				})
+				.catch((error) => {
+					dispatch(
+						updatePopUpStatus({
+							isAwsPut: false,
+							msg: '無法更新至資料庫，請檢查連線。',
+						})
+					);
+				});
 		}
-		dispatch(editTaskNameInGanttData(editedTask));
 	};
 
 	return (

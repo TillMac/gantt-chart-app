@@ -11,7 +11,6 @@ const initialState = {
 		isOffline: false,
 	},
 	isOpen: false,
-	isPost: false,
 	msg: null,
 };
 
@@ -47,8 +46,8 @@ export const popUpBarInfoSlice = createSlice({
 					state.msg = status.msg;
 					state.isOpen = true;
 					break;
-				case status.hasOwnProperty('isisGapiDel'):
-					state.connection.isisGapiDel = status.isisGapiDel;
+				case status.hasOwnProperty('isGapiDel'):
+					state.connection.isGapiDel = status.isGapiDel;
 					state.msg = status.msg;
 					state.isOpen = true;
 					break;
@@ -68,7 +67,7 @@ export const popUpBarInfoSlice = createSlice({
 			state.connection.isGapiDel = true;
 			state.connection.isGapiPatch = true;
 			state.connection.isGapiPost = true;
-			state.connection.isOffline = true;
+			state.connection.isOffline = false;
 			state.isOpen = false;
 			state.position = null;
 			state.msg = null;
@@ -76,13 +75,27 @@ export const popUpBarInfoSlice = createSlice({
 		postSuccessed: (state, action) => {
 			const type = action.payload;
 			state.isOpen = true;
-			state.isPost = true;
 			state.msg = `✅ 成功新增該 ${type}！`;
+		},
+		deleteSuccessed: (state, action) => {
+			const task = action.payload;
+			state.isOpen = true;
+			state.msg = `✅ 成功刪除 ${task.name} 這一 ${task.type}！`;
+		},
+		putSuccessed: (state, action) => {
+			const task = action.payload;
+			state.isOpen = true;
+			state.msg = `✅ 成功修改該 ${task.type} 從 「${task.oldName}」至「${task.newName}」`;
 		},
 	},
 });
 
-export const { updatePopUpStatus, closePopUpBar, postSuccessed } =
-	popUpBarInfoSlice.actions;
+export const {
+	updatePopUpStatus,
+	closePopUpBar,
+	postSuccessed,
+	deleteSuccessed,
+	putSuccessed,
+} = popUpBarInfoSlice.actions;
 
 export default popUpBarInfoSlice.reducer;

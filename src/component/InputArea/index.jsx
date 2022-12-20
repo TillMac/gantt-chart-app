@@ -73,38 +73,18 @@ const InputArea = () => {
 		});
 	};
 
-	const submitHandler = async (e) => {
+	const submitHandler = (e) => {
 		e.preventDefault();
 		if (isDateNotValid === false) {
-			await API.post('ganttTasksApi', '/gantttasks/', {
-				body: {
-					name: taskData.name,
-					id: taskData.id,
-					projectId: taskData.projectId,
-					start: taskData.start.toJSON(),
-					end: taskData.end.toJSON(),
-					progress: Number(taskData.progress),
-					type: taskData.type,
-				},
-			})
-				// .then((response) => console.log(response, 'from create task API'))
-				.catch((error) => {
-					dispatch(
-						updatePopUpStatus({
-							isAwsPost: false,
-							msg: '無法更新至資料庫，請檢查連線。',
-						})
-					);
-				});
-			const aDay = 24 * 60 * 60 * 1000;
-			const startDateCalendar = new Date(taskData.start.getTime() + aDay)
-				.toISOString()
-				.split('T')[0];
-			const endDateCalendar = new Date(taskData.end.getTime() + aDay)
-				.toISOString()
-				.split('T')[0];
 			if (userData[0].photoLink !== null) {
-				await fetch(
+				const aDay = 24 * 60 * 60 * 1000;
+				const startDateCalendar = new Date(taskData.start.getTime() + aDay)
+					.toISOString()
+					.split('T')[0];
+				const endDateCalendar = new Date(taskData.end.getTime() + aDay)
+					.toISOString()
+					.split('T')[0];
+				fetch(
 					'https://www.googleapis.com/calendar/v3/calendars/primary/events',
 					{
 						method: 'POST',
@@ -132,7 +112,37 @@ const InputArea = () => {
 						}
 						throw new Error('Google 認證已過期，請重新登入');
 					})
-					.then((data) => console.log(data))
+					.then((data) => {
+						console.log(data);
+						API.post('ganttTasksApi', '/gantttasks/', {
+							body: {
+								name: taskData.name,
+								id: taskData.id,
+								projectId: taskData.projectId,
+								start: taskData.start.toJSON(),
+								end: taskData.end.toJSON(),
+								progress: Number(taskData.progress),
+								type: taskData.type,
+							},
+						})
+							.then(() => {
+								dispatch(addTaskIntoGanttData(taskData));
+								if (
+									!!popUpBarInfo.connection.isAwsPost &&
+									!!popUpBarInfo.connection.isGapiPost
+								) {
+									dispatch(postSuccessed(taskData.type));
+								}
+							})
+							.catch((error) => {
+								dispatch(
+									updatePopUpStatus({
+										isAwsPost: false,
+										msg: '無法更新至資料庫，請檢查連線。',
+									})
+								);
+							});
+					})
 					.catch((error) => {
 						dispatch(
 							updatePopUpStatus({
@@ -141,15 +151,36 @@ const InputArea = () => {
 							})
 						);
 					});
+			} else {
+				API.post('ganttTasksApi', '/gantttasks/', {
+					body: {
+						name: taskData.name,
+						id: taskData.id,
+						projectId: taskData.projectId,
+						start: taskData.start.toJSON(),
+						end: taskData.end.toJSON(),
+						progress: Number(taskData.progress),
+						type: taskData.type,
+					},
+				})
+					.then(() => {
+						dispatch(addTaskIntoGanttData(taskData));
+						if (
+							!!popUpBarInfo.connection.isAwsPost &&
+							!!popUpBarInfo.connection.isGapiPost
+						) {
+							dispatch(postSuccessed(taskData.type));
+						}
+					})
+					.catch((error) => {
+						dispatch(
+							updatePopUpStatus({
+								isAwsPost: false,
+								msg: '無法更新至資料庫，請檢查連線。',
+							})
+						);
+					});
 			}
-			await dispatch(addTaskIntoGanttData(taskData));
-			if (
-				popUpBarInfo.connection.isAwsPost &&
-				popUpBarInfo.connection.isGapiPost
-			) {
-				dispatch(postSuccessed(taskData.type));
-			}
-
 			setTaskData({
 				id: null,
 				name: '',
